@@ -47,12 +47,30 @@ input,textarea,select{outline:none;appearance:none;-webkit-appearance:none}
   padding:5px 12px;font-size:12.5px;cursor:pointer;white-space:nowrap;flex:0 0 auto}
 .pill-toggle:active{background:var(--card2)}
 .card{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
-.empty{padding:48px 20px;text-align:center;color:var(--sub);font-size:14px}
+.empty{padding:40px 20px;text-align:center;color:var(--sub);font-size:14px}
 .fab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(78px + env(safe-area-inset-bottom));
   width:48px;height:48px;border-radius:50%;border:0;background:var(--accent);color:#fff;
   display:grid;place-items:center;cursor:pointer;z-index:40;box-shadow:0 6px 20px rgba(0,0,0,.22)}
 .fab svg{width:22px;height:22px}
 .fab:active{transform:translateX(-50%) scale(.93)}
+
+/* 豆仓状态标签 */
+.status-tabs{display:flex;gap:4px;margin-bottom:10px;background:var(--card2);padding:4px;border-radius:12px}
+.status-tabs button{flex:1;border:0;background:transparent;color:var(--sub);padding:8px 4px;border-radius:9px;
+  font-size:12.5px;cursor:pointer;font-weight:500;transition:.16s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status-tabs button.on{background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.08);font-weight:700}
+
+/* 搜索框 */
+.search-bar{position:relative;margin-bottom:10px}
+.search-bar input{width:100%;padding:10px 38px 10px 36px;border:1px solid var(--line);background:var(--card);
+  border-radius:12px;font-size:14px;color:var(--text)}
+.search-bar input:focus{border-color:var(--accent)}
+.search-bar .s-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;
+  color:var(--sub);pointer-events:none}
+.search-bar .s-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:26px;height:26px;
+  border:0;background:var(--card2);color:var(--sub);border-radius:50%;display:grid;place-items:center;
+  cursor:pointer;padding:0}
+.search-bar .s-clear svg{width:12px;height:12px}
 
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;background:var(--card);
   border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);
@@ -83,12 +101,22 @@ input,textarea,select{outline:none;appearance:none;-webkit-appearance:none}
 .tag-focus{background:var(--focus);color:var(--deep)}
 .tag-friend{background:var(--card2);color:var(--accent)}
 .card-meta{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px;font-size:12.5px;color:var(--sub)}
-.card-meta b{color:var(--text);font-weight:500}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin-top:10px}
 .grid2 .k{font-size:11.5px;color:var(--sub);line-height:1.3}
 .grid2 .v{font-size:13.5px;color:var(--text);font-weight:500;margin-top:1px;word-break:break-all}
 .full-row{grid-column:1/-1}
 .divider{height:1px;background:var(--line);margin:12px 0}
+
+/* 拼配表格 */
+.blend-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px;
+  border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.blend-table th{background:var(--card2);color:var(--sub);font-weight:500;font-size:11.5px;
+  padding:6px 8px;text-align:left;border-bottom:1px solid var(--line)}
+.blend-table th:not(:last-child),
+.blend-table td:not(:last-child){border-right:1px solid var(--line)}
+.blend-table td{padding:6px 8px;color:var(--text);word-break:break-all;line-height:1.5}
+.blend-table tr:not(:last-child) td{border-bottom:1px solid var(--line)}
+.blend-table td.dash{color:var(--sub)}
 
 .fld{display:block;margin-bottom:12px}
 .fld-l{display:block;font-size:12px;color:var(--sub);margin-bottom:5px;padding-left:2px}
@@ -98,7 +126,6 @@ textarea.inp{resize:vertical;min-height:70px;line-height:1.55}
 .inp:focus{border-color:var(--accent)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .row2 .fld{margin-bottom:12px}
-.inp-wrap{position:relative}
 .chk{display:flex;align-items:center;gap:9px;padding:11px 12px;border:1px solid var(--line);
   border-radius:12px;background:var(--card);cursor:pointer;margin-bottom:12px;user-select:none}
 .chk .box{width:19px;height:19px;border-radius:6px;border:1.5px solid var(--line);display:grid;
@@ -181,21 +208,39 @@ textarea.inp{resize:vertical;min-height:70px;line-height:1.55}
 .stat-big .sb-v{font-size:20px;font-weight:700;color:var(--deep);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stat-big .sb-k{font-size:11.5px;color:var(--sub);margin-top:2px}
 .stat-title{font-size:13px;color:var(--sub);margin:16px 2px 8px;font-weight:600}
+
+/* 统计三项左中右 */
+.stat-triple{display:flex;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+  overflow:hidden;margin-bottom:12px}
+.stat-triple .st-item{flex:1;padding:14px 4px;text-align:center;border-right:1px solid var(--line);min-width:0}
+.stat-triple .st-item:last-child{border-right:0}
+.stat-triple .st-v{font-size:17px;font-weight:700;color:var(--deep);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stat-triple .st-k{font-size:11px;color:var(--sub);margin-top:3px}
+
 .bar-line{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:12.5px}
 .bar-line .bl-name{width:78px;flex:0 0 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--sub)}
 .bar-line .bl-track{flex:1;height:16px;background:var(--card2);border-radius:8px;overflow:hidden}
 .bar-line .bl-fill{height:100%;background:var(--accent);border-radius:8px;min-width:2px}
 .bar-line .bl-val{width:52px;text-align:right;flex:0 0 auto;color:var(--text);font-variant-numeric:tabular-nums}
 
-.chart{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
-.chart-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}
-.chart-row:last-child{margin-bottom:0}
-.chart-m{width:30px;font-size:11.5px;color:var(--sub);flex:0 0 auto}
-.chart-bars{flex:1;display:flex;flex-direction:column;gap:2px}
-.cbar{height:9px;border-radius:5px;min-width:0;transition:width .3s}
-.cbar.bean{background:var(--accent)}
-.cbar.shop{background:var(--focus)}
-.chart-legend{display:flex;gap:16px;margin-top:12px;font-size:11.5px;color:var(--sub);justify-content:center}
+/* 年度竖向柱状图 */
+.vchart{background:var(--card);border-radius:var(--radius);padding:14px 12px 10px;box-shadow:var(--shadow)}
+.vchart-head{font-size:12px;color:var(--sub);margin-bottom:10px;display:flex;justify-content:space-between}
+.vchart-wrap{display:flex;gap:6px;height:160px}
+.vchart-y{display:flex;flex-direction:column;justify-content:space-between;font-size:10px;color:var(--sub);
+  width:34px;text-align:right;padding-bottom:18px;flex:0 0 auto}
+.vchart-plot{position:relative;flex:1;border-bottom:1px solid var(--line);border-left:1px solid var(--line);
+  height:100%;min-width:0}
+.vchart-grid{position:absolute;left:0;right:0;border-top:1px dashed var(--line);opacity:.55}
+.vchart-bars{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;align-items:flex-end;padding:0 2px;gap:1px}
+.vchart-col{flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center;min-width:0}
+.vchart-pair{display:flex;gap:1px;align-items:flex-end;height:100%;width:100%;justify-content:center}
+.vbar{width:42%;max-width:7px;border-radius:2px 2px 0 0;min-height:1px;transition:height .3s}
+.vbar.bean{background:var(--accent)}
+.vbar.shop{background:var(--focus)}
+.vchart-months{display:flex;padding:3px 2px 0 40px;font-size:10px;color:var(--sub)}
+.vchart-months span{flex:1;text-align:center;min-width:0}
+.chart-legend{display:flex;gap:16px;margin-top:10px;font-size:11.5px;color:var(--sub);justify-content:center}
 .chart-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
 </style>
 </head>
@@ -223,6 +268,7 @@ function toast(msg){
 }
 
 /* ========== 图标 ========== */
+const STAR_PATH = 'M12 2.5l2.95 6.13 6.55.91-4.75 4.62 1.12 6.59L12 17.66l-5.87 3.09 1.12-6.59L2.5 9.54l6.55-.91z';
 const ICON = {
   bean: (fill='var(--card)') => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <g transform="rotate(30 15.6 11.2)">
@@ -242,24 +288,13 @@ const ICON = {
   gear: () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="3"/>
     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
-  pour: () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M3.5 4.5h8.2l1.6 3.6H3.5z"/>
-    <path d="M3.5 4.5v3.6"/>
-    <path d="M11.6 5.6l4.2 1.6v2.4"/>
-    <path d="M13.6 3.2c-.7.9-.7 1.5 0 2.4"/>
-    <path d="M15.8 8.4l-1.6 3.2"/>
-    <path d="M7.4 11.2h9.2l-1.2 4.4H8.6z"/>
-    <path d="M9.6 15.6h4.8l.7 3.9H8.9z"/>
-    <path d="M8.9 19.5h6.2v1.6H8.9z"/>
-  </svg>`,
-  shop: () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 9.5V19a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9.5"/>
-    <path d="M3 9.5 5 4h14l2 5.5a2.6 2.6 0 0 1-4.5 1.6A2.6 2.6 0 0 1 12 11a2.6 2.6 0 0 1-4.5 .1A2.6 2.6 0 0 1 3 9.5Z"/>
-    <path d="M10 20v-5h4v5"/>
-  </svg>`,
   plus: () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`,
   back: () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>`,
-  check: () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.4 4.4L19 7.5"/></svg>`
+  check: () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.4 4.4L19 7.5"/></svg>`,
+  search: () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>`,
+  close: () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>`,
+  starOutline: () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="${STAR_PATH}"/></svg>`,
+  starSolid: () => `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"><path d="${STAR_PATH}"/></svg>`
 };
 
 /* ========== 数据层 ========== */
@@ -270,7 +305,11 @@ const DEFAULT_STATE = {
   memory:{ dripper:[], grinder:[], grind:[], method:[] }
 };
 let state = loadState();
-let ui = { tab:'home', beanDense:false, recipeDense:false, detail:null };
+let ui = {
+  tab:'home', beanDense:false, recipeDense:false, detail:null,
+  beanTab:'drinking',           /* 新增：豆仓状态标签 */
+  searchBean:'', searchRecord:'', searchRecipe:''  /* 新增：搜索关键词 */
+};
 
 function loadState(){
   try{
@@ -471,26 +510,72 @@ function viewHome(){
 
 /* ========== 豆仓 ========== */
 function viewBeans(){
-  const list = [...state.beans].sort((a,b)=>{
-    const order = {drinking:0,stock:1,done:2};
-    const d = (order[a.status]??3)-(order[b.status]??3);
-    if(d) return d;
-    return (b.createdAt||0)-(a.createdAt||0);
-  });
+  const counts = {
+    drinking: state.beans.filter(b=>b.status==='drinking').length,
+    stock:    state.beans.filter(b=>b.status==='stock').length,
+    done:     state.beans.filter(b=>b.status==='done').length
+  };
   return `
   <div class="page-head">
     <h1 class="title">豆仓</h1>
     <button class="pill-toggle" data-act="toggle-bean-dense">${ui.beanDense?'详细':'简略'}</button>
     <button class="round-add" data-act="add-bean">${ICON.plus()}</button>
   </div>
-  ${ list.length ? list.map(beanCard).join('') : `<div class="empty">还没有豆子，点右上角 + 添加</div>` }
+
+  <div class="status-tabs">
+    <button class="${ui.beanTab==='drinking'?'on':''}" data-act="set-bean-tab" data-tab="drinking">在喝 ${counts.drinking}</button>
+    <button class="${ui.beanTab==='stock'?'on':''}" data-act="set-bean-tab" data-tab="stock">囤豆中 ${counts.stock}</button>
+    <button class="${ui.beanTab==='done'?'on':''}" data-act="set-bean-tab" data-tab="done">喝完 ${counts.done}</button>
+  </div>
+
+  <div class="search-bar">
+    <span class="s-icon">${ICON.search()}</span>
+    <input id="beanSearch" type="text" placeholder="搜索豆名 / 烘焙商 / 产区…"
+      value="${esc(ui.searchBean)}" oninput="window.__searchBean(this.value)">
+    ${ui.searchBean?`<button class="s-clear" onclick="window.__clearSearch('bean')">${ICON.close()}</button>`:''}
+  </div>
+
+  <div id="beanList">${renderBeanList()}</div>
   <button class="fab" data-act="add-bean">${ICON.plus()}</button>
   `;
 }
+
+function renderBeanList(){
+  let list = state.beans.filter(b=>b.status===ui.beanTab);
+  const q = (ui.searchBean||'').trim().toLowerCase();
+  if(q){
+    list = list.filter(b=>{
+      const hay = [
+        b.name, b.roaster, b.origin, b.variety, b.process, b.flavors,
+        ...(b.blendParts||[]).flatMap(x=>[x.origin,x.variety,x.process])
+      ].filter(Boolean).join(' ').toLowerCase();
+      return hay.includes(q);
+    });
+  }
+  list.sort((a,b)=> (b.createdAt||0)-(a.createdAt||0));
+  return list.length ? list.map(beanCard).join('')
+    : `<div class="empty">${q?'没有匹配的豆子':'这个分类还没有豆子'}</div>`;
+}
+
+/* 拼配表格 */
+function blendTableHTML(parts){
+  const rows = (parts||[]).filter(x=>x.origin||x.variety||x.process);
+  if(!rows.length) return '';
+  return `<table class="blend-table">
+    <thead><tr><th>产区</th><th>豆种</th><th>处理法</th></tr></thead>
+    <tbody>
+      ${rows.map(x=>`<tr>
+        <td class="${x.origin?'':'dash'}">${esc(x.origin||'-')}</td>
+        <td class="${x.variety?'':'dash'}">${esc(x.variety||'-')}</td>
+        <td class="${x.process?'':'dash'}">${esc(x.process||'-')}</td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
 function beanCard(b){
   const p = priceInfo(b);
   const dense = ui.beanDense;
-  const parts = (b.blendParts||[]).filter(x=>x.origin||x.variety||x.process);
   let body = '';
   if(dense){
     if(b.isBlend){
@@ -500,10 +585,10 @@ function beanCard(b){
         <div><div class="k">烘焙日期</div><div class="v">${esc(b.roastDate||'—')}</div></div>
         <div><div class="k">最新克价</div><div class="v">${fmtPrice(p.latest)}</div></div>
       </div>`;
-      if(parts.length){
-        body += `<div class="divider"></div><div style="font-size:12.5px;color:var(--sub);line-height:1.9">
-          ${parts.map(x=>`<div>· ${esc([x.origin,x.variety,x.process].filter(Boolean).join(' / '))}</div>`).join('')}
-        </div>`;
+      if((b.blendParts||[]).length){
+        body += `<div class="divider"></div>
+          <div style="font-size:11.5px;color:var(--sub);margin-bottom:4px">拼配组成</div>
+          ${blendTableHTML(b.blendParts)}`;
       }
     }else{
       body = `<div class="grid2">
@@ -537,9 +622,45 @@ function beanCard(b){
   </div>`;
 }
 
+/* 搜索/标签切换的 DOM 局部刷新（不重渲染整个页面，避免输入框失焦） */
+window.__searchBean = function(val){
+  ui.searchBean = val;
+  const el = $('#beanList');
+  if(el) el.innerHTML = renderBeanList();
+  $$('#beanList .swipe').forEach(attachSwipe);
+  const wrap = $('.search-bar');
+  if(wrap){
+    const existing = $('.s-clear', wrap);
+    if(val && !existing){
+      const btn = document.createElement('button');
+      btn.className = 's-clear';
+      btn.innerHTML = ICON.close();
+      btn.onclick = ()=> window.__clearSearch('bean');
+      wrap.appendChild(btn);
+    }else if(!val && existing){
+      existing.remove();
+    }
+  }
+};
+window.__clearSearch = function(which){
+  if(which==='bean'){
+    ui.searchBean = '';
+    const inp = $('#beanSearch'); if(inp) inp.value = '';
+    window.__searchBean('');
+  }else if(which==='record'){
+    ui.searchRecord = '';
+    const inp = $('#recordSearch'); if(inp) inp.value = '';
+    window.__searchRecord('');
+  }else if(which==='recipe'){
+    ui.searchRecipe = '';
+    const inp = $('#recipeSearch'); if(inp) inp.value = '';
+    window.__searchRecipe('');
+  }
+};
+
+/* 豆子详情 */
 function renderBeanDetail(b){
   const p = priceInfo(b);
-  const parts = (b.blendParts||[]).filter(x=>x.origin||x.variety||x.process);
   const purchases = [...(b.purchases||[])].sort((a,b2)=>(b2.date||'').localeCompare(a.date||''));
   const latestPurchase = purchases[0] || {};
   const brews = state.brews.filter(x=>x.beanId===b.id)
@@ -554,20 +675,10 @@ function renderBeanDetail(b){
       <div><div class="k">最新克价</div><div class="v">${fmtPrice(p.latest)}</div></div>
       <div><div class="k">最低克价</div><div class="v">${fmtPrice(p.lowest)}</div></div>
     </div>`;
-    if(parts.length){
+    if((b.blendParts||[]).length){
       base += `<div class="divider"></div>
-      <div style="font-size:12px;color:var(--sub);margin-bottom:8px">拼配组成</div>
-      <div class="grid2">
-        ${parts.map((x,i)=>`
-          <div class="full-row" style="background:var(--card2);border-radius:11px;padding:9px 12px">
-            <div style="font-size:11.5px;color:var(--sub);margin-bottom:3px">豆 ${i+1}</div>
-            <div style="font-size:13.5px;line-height:1.7">
-              ${x.origin?`产区：${esc(x.origin)}<br>`:''}
-              ${x.variety?`豆种：${esc(x.variety)}<br>`:''}
-              ${x.process?`处理法：${esc(x.process)}`:''}
-            </div>
-          </div>`).join('')}
-      </div>`;
+        <div style="font-size:12px;color:var(--sub);margin-bottom:6px">拼配组成</div>
+        ${blendTableHTML(b.blendParts)}`;
     }
   }else{
     base = `<div class="grid2">
@@ -761,16 +872,42 @@ function openBeanForm(id){
 
 /* ========== 记一笔 ========== */
 function viewRecord(){
-  const items = [
-    ...state.brews.map(b=>({t:'brew', d:b, ts:b.createdAt||0})),
-    ...state.experiences.map(e=>({t:'exp', d:e, ts:e.createdAt||0}))
-  ].sort((a,b)=> (b.d.date||'').localeCompare(a.d.date||'') || (b.ts-a.ts));
   return `
   <div class="page-head">
     <h1 class="title">记一笔</h1>
     <button class="round-add" data-act="new-record">${ICON.plus()}</button>
   </div>
-  ${ items.length ? items.map(it=>{
+
+  <div class="search-bar">
+    <span class="s-icon">${ICON.search()}</span>
+    <input id="recordSearch" type="text" placeholder="搜索豆名 / 店名 / 笔记…"
+      value="${esc(ui.searchRecord)}" oninput="window.__searchRecord(this.value)">
+    ${ui.searchRecord?`<button class="s-clear" onclick="window.__clearSearch('record')">${ICON.close()}</button>`:''}
+  </div>
+
+  <div id="recordList">${renderRecordList()}</div>
+  <button class="fab" data-act="new-record">${ICON.plus()}</button>`;
+}
+
+function renderRecordList(){
+  const q = (ui.searchRecord||'').trim().toLowerCase();
+  let items = [
+    ...state.brews.map(b=>({t:'brew', d:b, ts:b.createdAt||0})),
+    ...state.experiences.map(e=>({t:'exp', d:e, ts:e.createdAt||0}))
+  ];
+  if(q){
+    items = items.filter(it=>{
+      const d = it.d;
+      const hay = [
+        d.beanName, d.shop, d.drink, d.flavor, d.notes, d.technique, d.experience, d.other,
+        d.dripper, d.grinder, d.method
+      ].filter(Boolean).join(' ').toLowerCase();
+      return hay.includes(q);
+    });
+  }
+  items.sort((a,b)=> (b.d.date||'').localeCompare(a.d.date||'') || (b.ts-a.ts));
+  if(!items.length) return `<div class="empty">${q?'没有匹配的记录':'还没有记录，点 + 开始记录'}</div>`;
+  return items.map(it=>{
     if(it.t==='brew'){
       const b = it.d;
       return `<div class="swipe" data-swipe-id="${b.id}" data-swipe-type="brew">
@@ -811,9 +948,27 @@ function viewRecord(){
         </div>
       </div>`;
     }
-  }).join('') : `<div class="empty">还没有记录，点 + 开始记录</div>` }
-  <button class="fab" data-act="new-record">${ICON.plus()}</button>`;
+  }).join('');
 }
+window.__searchRecord = function(val){
+  ui.searchRecord = val;
+  const el = $('#recordList');
+  if(el) el.innerHTML = renderRecordList();
+  $$('#recordList .swipe').forEach(attachSwipe);
+  const wrap = $('.search-bar');
+  if(wrap){
+    const existing = $('.s-clear', wrap);
+    if(val && !existing){
+      const btn = document.createElement('button');
+      btn.className = 's-clear';
+      btn.innerHTML = ICON.close();
+      btn.onclick = ()=> window.__clearSearch('record');
+      wrap.appendChild(btn);
+    }else if(!val && existing){
+      existing.remove();
+    }
+  }
+};
 
 function openBrewForm(id){
   const b = id ? state.brews.find(x=>x.id===id) : null;
@@ -977,19 +1132,60 @@ function openExpForm(id){
 
 /* ========== 冲煮方案 ========== */
 function viewRecipes(){
-  const list = [...state.recipes].sort((a,b)=>{
-    if((b.pinned?1:0)-(a.pinned?1:0)) return (b.pinned?1:0)-(a.pinned?1:0);
-    return (b.createdAt||0)-(a.createdAt||0);
-  });
   return `
   <div class="page-head">
     <h1 class="title">冲煮方案</h1>
     <button class="pill-toggle" data-act="toggle-recipe-dense">${ui.recipeDense?'详细':'简略'}</button>
     <button class="round-add" data-act="add-recipe">${ICON.plus()}</button>
   </div>
-  ${ list.length ? list.map(recipeCard).join('') : `<div class="empty">还没有方案，点右上角 + 新建</div>` }
+
+  <div class="search-bar">
+    <span class="s-icon">${ICON.search()}</span>
+    <input id="recipeSearch" type="text" placeholder="搜索方案名 / 滤杯 / 磨豆机…"
+      value="${esc(ui.searchRecipe)}" oninput="window.__searchRecipe(this.value)">
+    ${ui.searchRecipe?`<button class="s-clear" onclick="window.__clearSearch('recipe')">${ICON.close()}</button>`:''}
+  </div>
+
+  <div id="recipeList">${renderRecipeList()}</div>
   <button class="fab" data-act="add-recipe">${ICON.plus()}</button>`;
 }
+function renderRecipeList(){
+  let list = [...state.recipes];
+  const q = (ui.searchRecipe||'').trim().toLowerCase();
+  if(q){
+    list = list.filter(r=>{
+      const hay = [r.title, r.dripper, r.grinder, r.grind, r.method, r.flavor, r.technique, r.notes]
+        .filter(Boolean).join(' ').toLowerCase();
+      return hay.includes(q);
+    });
+  }
+  list.sort((a,b)=>{
+    if((b.pinned?1:0)-(a.pinned?1:0)) return (b.pinned?1:0)-(a.pinned?1:0);
+    return (b.createdAt||0)-(a.createdAt||0);
+  });
+  return list.length ? list.map(recipeCard).join('')
+    : `<div class="empty">${q?'没有匹配的方案':'还没有方案，点右上角 + 新建'}</div>`;
+}
+window.__searchRecipe = function(val){
+  ui.searchRecipe = val;
+  const el = $('#recipeList');
+  if(el) el.innerHTML = renderRecipeList();
+  $$('#recipeList .swipe').forEach(attachSwipe);
+  const wrap = $('.search-bar');
+  if(wrap){
+    const existing = $('.s-clear', wrap);
+    if(val && !existing){
+      const btn = document.createElement('button');
+      btn.className = 's-clear';
+      btn.innerHTML = ICON.close();
+      btn.onclick = ()=> window.__clearSearch('recipe');
+      wrap.appendChild(btn);
+    }else if(!val && existing){
+      existing.remove();
+    }
+  }
+};
+
 function recipeCard(r){
   const dense = ui.recipeDense;
   return `
@@ -1161,11 +1357,13 @@ function viewStats(){
     }
   });
   const maxVal = Math.max(1, ...yearBean, ...yearShop);
+
   return `
   <div class="page-head">
     <h1 class="title">统计</h1>
     <button class="pill-toggle" data-act="pick-month">${y}年${m}月 ▾</button>
   </div>
+
   <div class="stat-big">
     <div class="sb-row">
       <div class="sb-item"><div class="sb-v">¥${(beanSpend+shopSpend).toFixed(1)}</div><div class="sb-k">本月总花费</div></div>
@@ -1173,28 +1371,57 @@ function viewStats(){
       <div class="sb-item"><div class="sb-v">¥${avgPrice.toFixed(2)}</div><div class="sb-k">平均克价</div></div>
     </div>
   </div>
-  <div class="card">
-    <div class="sb-row">
-      <div class="sb-item"><div class="sb-v" style="font-size:17px">¥${beanSpend.toFixed(1)}</div><div class="sb-k">买豆消费</div></div>
-      <div class="sb-item"><div class="sb-v" style="font-size:17px">¥${shopSpend.toFixed(1)}</div><div class="sb-k">门店消费</div></div>
-      <div class="sb-item"><div class="sb-v" style="font-size:17px">${totalWeight.toFixed(0)}g</div><div class="sb-k">购入重量</div></div>
+
+  <div class="stat-triple">
+    <div class="st-item">
+      <div class="st-v">¥${beanSpend.toFixed(1)}</div>
+      <div class="st-k">买豆消费</div>
+    </div>
+    <div class="st-item">
+      <div class="st-v">¥${shopSpend.toFixed(1)}</div>
+      <div class="st-k">门店消费</div>
+    </div>
+    <div class="st-item">
+      <div class="st-v">${totalWeight.toFixed(0)}g</div>
+      <div class="st-k">购入重量</div>
     </div>
   </div>
-  <div class="stat-title">年度图表 · ${y}</div>
-  <div class="chart">
-    ${Array.from({length:12},(_,i)=>`
-      <div class="chart-row">
-        <div class="chart-m">${i+1}月</div>
-        <div class="chart-bars">
-          <div class="cbar bean" style="width:${(yearBean[i]/maxVal*100).toFixed(1)}%"></div>
-          <div class="cbar shop" style="width:${(yearShop[i]/maxVal*100).toFixed(1)}%"></div>
+
+  <div class="stat-title">年度消费统计（${y}年）</div>
+  <div class="vchart">
+    <div class="vchart-head"><span>单位：元</span><span>最高 ¥${maxVal.toFixed(0)}</span></div>
+    <div class="vchart-wrap">
+      <div class="vchart-y">
+        <span>${maxVal.toFixed(0)}</span>
+        <span>${(maxVal/2).toFixed(0)}</span>
+        <span>0</span>
+      </div>
+      <div class="vchart-plot">
+        <div class="vchart-grid" style="top:0"></div>
+        <div class="vchart-grid" style="top:50%"></div>
+        <div class="vchart-bars">
+          ${Array.from({length:12},(_,i)=>{
+            const bh = maxVal>0 ? yearBean[i]/maxVal*100 : 0;
+            const sh = maxVal>0 ? yearShop[i]/maxVal*100 : 0;
+            return `<div class="vchart-col" title="${i+1}月 买豆¥${yearBean[i].toFixed(1)} 门店¥${yearShop[i].toFixed(1)}">
+              <div class="vchart-pair">
+                <div class="vbar bean" style="height:${bh}%"></div>
+                <div class="vbar shop" style="height:${sh}%"></div>
+              </div>
+            </div>`;
+          }).join('')}
         </div>
-      </div>`).join('')}
+      </div>
+    </div>
+    <div class="vchart-months">
+      ${Array.from({length:12},(_,i)=>`<span>${i+1}</span>`).join('')}
+    </div>
     <div class="chart-legend">
       <span><i style="background:var(--accent)"></i>买豆</span>
       <span><i style="background:var(--focus)"></i>门店</span>
     </div>
   </div>
+
   ${ topPlans.length ? `<div class="stat-title">常用方案</div>
   <div class="card">${topPlans.map(([k,v])=>barLine(k,v,Math.max(...topPlans.map(x=>x[1])))).join('')}</div>`:'' }
   ${ topBeans.length ? `<div class="stat-title">常买豆子</div>
@@ -1296,7 +1523,7 @@ function openSettings(){
   page._refreshTheme = drawThemes;
 }
 
-/* ========== 数据迁移（导入旧格式） ========== */
+/* ========== 数据迁移 ========== */
 function migrateOldData(d) {
   const mapTheme = t => {
     if (!t) return 'pink';
@@ -1422,603 +1649,4 @@ function migrateOldData(d) {
       waterTemp: r.temp || '',
       totalWater: r.water || '',
       totalTime: r.totalTime || '',
-      rating: r.rating || 0,
-      flavor: r.flavor || '',
-      technique: r.stages || '',
-      notes: r.review || '',
-      pinned: false,
-      createdAt: r.createdAt || Date.now()
-    }));
-  }
-
-  if (d.memory) newState.memory = Object.assign(newState.memory, d.memory);
-  return newState;
-}
-
-/* ========== 导入导出 ========== */
-function openExportModal(){
-  const data = JSON.stringify({
-    settings:state.settings, beans:state.beans, brews:state.brews,
-    experiences:state.experiences, recipes:state.recipes, memory:state.memory
-  });
-  const mask = document.createElement('div');
-  mask.className = 'mask';
-  mask.innerHTML = `<div class="modal">
-    <h3>导出 / 备份</h3>
-    <textarea class="inp" id="expText" readonly style="height:130px;font-size:12px;margin-bottom:14px"></textarea>
-    <div class="m-btns">
-      <button class="btn ghost" data-close>关闭</button>
-      <button class="btn" data-copy>复制到剪贴板</button>
-    </div>
-  </div>`;
-  document.body.appendChild(mask);
-  requestAnimationFrame(()=>mask.classList.add('in'));
-  $('#expText', mask).value = data;
-  mask.onclick = async e=>{
-    if(e.target.closest('[data-copy]')){ await copyText(data); return; }
-    if(e.target===mask || e.target.closest('[data-close]')) close();
-  };
-  function close(){ mask.classList.remove('in'); setTimeout(()=>mask.remove(),200); }
-}
-
-function openImportModal(){
-  const mask = document.createElement('div');
-  mask.className = 'mask';
-  mask.innerHTML = `<div class="modal">
-    <h3>导入备份</h3>
-    <textarea class="inp" id="impText" placeholder="把备份数据粘贴到这里…" style="height:150px;font-size:12px;margin-bottom:14px"></textarea>
-    <div class="m-btns">
-      <button class="btn ghost" data-close>取消</button>
-      <button class="btn" data-do>导入</button>
-    </div>
-  </div>`;
-  document.body.appendChild(mask);
-  requestAnimationFrame(()=>mask.classList.add('in'));
-  mask.onclick = e=>{
-    if(e.target.closest('[data-do]')){
-      const txt = $('#impText', mask).value.trim();
-      if(!txt){ toast('请先粘贴备份数据'); return; }
-      try{
-        const d = JSON.parse(txt);
-        if(!d || typeof d!=='object') throw new Error('不是有效的备份数据');
-
-        const isOld = Array.isArray(d.beans) && d.beans.length > 0 &&
-                      (d.beans[0].blend !== undefined || d.beans[0].blendInfo !== undefined);
-
-        let newData;
-        if(isOld){
-          newData = migrateOldData(d);
-        }else{
-          newData = {
-            settings: Object.assign({}, state.settings, d.settings),
-            beans: d.beans || [],
-            brews: d.brews || [],
-            experiences: d.experiences || [],
-            recipes: d.recipes || [],
-            memory: Object.assign({dripper:[],grinder:[],grind:[],method:[]}, d.memory)
-          };
-        }
-
-        state.settings    = newData.settings;
-        state.beans       = newData.beans;
-        state.brews       = newData.brews;
-        state.experiences = newData.experiences;
-        state.recipes     = newData.recipes;
-        state.memory      = newData.memory;
-
-        saveState();
-        applyTheme(state.settings.theme);
-        close();
-        toast('导入成功');
-        render();
-      }catch(err){
-        toast('导入失败：' + err.message);
-      }
-      return;
-    }
-    if(e.target===mask || e.target.closest('[data-close]')) close();
-  };
-  function close(){ mask.classList.remove('in'); setTimeout(()=>mask.remove(),200); }
-}
-
-async function copyText(text){
-  try{
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      await navigator.clipboard.writeText(text);
-      toast('已复制到剪贴板');
-      return;
-    }
-  }catch(e){}
-  try{
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position='fixed'; ta.style.opacity='0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    ta.remove();
-    toast('已复制到剪贴板');
-  }catch(e){ toast('复制失败，请手动长按选择'); }
-}
-
-/* ========== 全屏页 / 读表单 / 历史下拉 ========== */
-function openFull(title, bodyHTML){
-  const el = document.createElement('div');
-  el.className = 'fullpage';
-  el.innerHTML = `
-    <div class="fp-head">
-      <button class="icon-btn" data-close>${ICON.back()}</button>
-      <h2 class="fp-title">${esc(title)}</h2>
-      <span style="width:36px;flex:0 0 36px"></span>
-    </div>
-    <div class="fp-body">${bodyHTML}</div>`;
-  document.body.appendChild(el);
-  requestAnimationFrame(()=>el.classList.add('in'));
-  el.querySelector('[data-close]').onclick = ()=>{
-    el.classList.remove('in');
-    setTimeout(()=>el.remove(), 240);
-  };
-  $$('.stars', el).forEach(box=>{
-    box.addEventListener('click', e=>{
-      const s = e.target.closest('.star');
-      if(!s) return;
-      const v = +s.dataset.v;
-      box.dataset.value = v;
-      $$('.star', box).forEach(st=> st.classList.toggle('on', +st.dataset.v <= v));
-    });
-  });
-  return el;
-}
-function readForm(root){
-  const out = {};
-  $$('[data-k]', root).forEach(el=>{ out[el.dataset.k] = el.value; });
-  $$('[data-stars]', root).forEach(el=>{ out[el.dataset.stars] = +el.dataset.value || 0; });
-  return out;
-}
-function attachHistory(input){
-  const key = input.dataset.hist;
-  input.addEventListener('focus', ()=> showHist(input, key));
-  input.addEventListener('click', ()=> showHist(input, key));
-  input.addEventListener('blur', ()=> setTimeout(hideHist, 160));
-}
-let curHistPop = null;
-function hideHist(){ if(curHistPop){ curHistPop.remove(); curHistPop = null; } }
-function showHist(input, key){
-  hideHist();
-  const list = (state.memory[key]||[]).filter(Boolean);
-  if(!list.length) return;
-  const r = input.getBoundingClientRect();
-  const pop = document.createElement('div');
-  pop.className = 'hist-pop';
-  pop.innerHTML = list.map(v=>`<button type="button">${esc(v)}</button>`).join('');
-  pop.style.left = r.left + 'px';
-  pop.style.top  = (r.bottom + 4) + 'px';
-  pop.style.width = r.width + 'px';
-  document.body.appendChild(pop);
-  curHistPop = pop;
-  pop.addEventListener('mousedown', e=>{
-    const b = e.target.closest('button');
-    if(!b) return;
-    e.preventDefault();
-    input.value = b.textContent;
-    input.dispatchEvent(new Event('input'));
-    hideHist();
-  });
-}
-
-/* ========== 滑动操作 ========== */
-function attachSwipe(el){
-  const content = $('.swipe-content', el);
-  if(!content) return;
-  const actions = $('.swipe-actions', el);
-  if(!actions) return;
-  const actionW = actions.offsetWidth || ($$('.swipe-btn', actions).length * 70);
-  let startX = 0, startY = 0, curX = 0, moving = false, decided = false, open = false;
-  content.addEventListener('touchstart', e=>{
-    if(e.touches.length !== 1) return;
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    curX = 0; moving = true; decided = false;
-  }, {passive:true});
-  content.addEventListener('touchmove', e=>{
-    if(!moving) return;
-    const dx = e.touches[0].clientX - startX;
-    const dy = e.touches[0].clientY - startY;
-    if(!decided){
-      if(Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
-      decided = true;
-      if(Math.abs(dy) > Math.abs(dx)){ moving = false; return; }
-      content.classList.add('dragging');
-    }
-    e.preventDefault();
-    let base = open ? -actionW : 0;
-    let x = base + dx;
-    if(x > 0) x = 0;
-    if(x < -actionW) x = -actionW;
-    curX = x;
-    content.style.transform = `translateX(${x}px)`;
-  }, {passive:false});
-  content.addEventListener('touchend', ()=>{
-    if(!moving) return;
-    moving = false;
-    content.classList.remove('dragging');
-    if(!decided) return;
-    const shouldOpen = curX < -actionW*0.4;
-    open = shouldOpen;
-    content.style.transform = `translateX(${shouldOpen ? -actionW : 0}px)`;
-    content.dataset.justSwiped = '1';
-    setTimeout(()=>{ content.dataset.justSwiped = ''; }, 260);
-  });
-  content.addEventListener('click', e=>{
-    if(open){
-      e.stopPropagation(); e.preventDefault();
-      open = false;
-      content.style.transform = 'translateX(0)';
-    }
-  }, true);
-}
-
-/* ========== 全局事件 ========== */
-document.addEventListener('click', e=>{
-  const el = e.target.closest('[data-act]');
-  if(!el) return;
-  const sc = e.target.closest('.swipe-content');
-  if(sc && sc.dataset.justSwiped === '1' && el.dataset.act.startsWith('open-')) return;
-  const act = el.dataset.act;
-  const id  = el.dataset.id;
-  switch(act){
-    case 'tab':
-      ui.tab = el.dataset.tab; ui.detail = null; render(); window.scrollTo(0,0); break;
-    case 'settings': openSettings(); break;
-    case 'close-full': el.closest('.fullpage')?.querySelector('[data-close]')?.click(); break;
-    case 'close-detail': ui.detail = null; render(); window.scrollTo(0,0); break;
-    case 'set-theme': {
-      state.settings.theme = el.dataset.key;
-      saveState(); applyTheme(state.settings.theme);
-      const p = el.closest('.fullpage');
-      if(p && p._refreshTheme) p._refreshTheme();
-      toast('已切换主题');
-      break;
-    }
-    case 'save-appname': {
-      const inp = $('#setName');
-      const v = (inp?.value||'').trim();
-      if(!v){ toast('名称不能为空'); break; }
-      state.settings.appName = v;
-      saveState(); toast('已保存');
-      break;
-    }
-    case 'toggle-bean-dense': ui.beanDense = !ui.beanDense; render(); break;
-    case 'add-bean': openBeanForm(null); break;
-    case 'edit-bean': openBeanForm(id); break;
-    case 'open-bean': ui.detail = { type:'bean', id }; render(); window.scrollTo(0,0); break;
-    case 'del-bean': {
-      confirmModal('删除豆子？', '该豆子的冲煮记录不会被删除，但会失去关联。', ()=>{
-        state.beans = state.beans.filter(x=>x.id!==id);
-        saveState(); render(); toast('已删除');
-      });
-      break;
-    }
-    case 'save-bean': {
-      const page = el.closest('.fullpage');
-      const o = page._beforeSave ? page._beforeSave() : readForm(page);
-      if(!o.name || !o.name.trim()){ toast('请填写品名'); return; }
-      if(id){
-        const b = state.beans.find(x=>x.id===id);
-        Object.assign(b, o);
-      }else{
-        state.beans.push(Object.assign({ id:uid('bean'), createdAt:Date.now() }, o));
-      }
-      saveState();
-      page.querySelector('[data-close]').click();
-      toast('已保存');
-      setTimeout(render, 240);
-      break;
-    }
-    case 'toggle-blend': {
-      const on = el.classList.toggle('on');
-      $('.lbl', el).textContent = '拼配豆' + (on?' ✓':'');
-      const page = el.closest('.fullpage');
-      $('#singleBox', page).style.display = on ? 'none' : '';
-      $('#blendBox',  page).style.display = on ? '' : 'none';
-      break;
-    }
-    case 'toggle-friend': {
-      const on = el.classList.toggle('on');
-      $('.lbl', el).textContent = '朋友分享' + (on?' ✓':'');
-      break;
-    }
-    case 'toggle-brew-friend': {
-      const on = el.classList.toggle('on');
-      $('.lbl', el).textContent = '朋友分享（自动存入豆仓）' + (on?' ✓':'');
-      break;
-    }
-    case 'add-blend-part': {
-      const page = el.closest('.fullpage');
-      const box = $('#blendParts', page);
-      const i = box.children.length;
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.style.cssText = 'margin-bottom:9px;padding:12px';
-      div.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-size:12px;color:var(--sub)">豆 ${i+1}</span>
-          <button class="icon-btn" style="width:28px;height:28px" data-rm>
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>
-          </button>
-        </div>
-        <div class="row2">
-          <label class="fld" style="margin-bottom:8px"><span class="fld-l">产区</span><input class="inp"></label>
-          <label class="fld" style="margin-bottom:8px"><span class="fld-l">豆种</span><input class="inp"></label>
-        </div>
-        <label class="fld" style="margin-bottom:0"><span class="fld-l">处理法</span><input class="inp"></label>`;
-      box.appendChild(div);
-      div.querySelector('[data-rm]').onclick = ()=> div.remove();
-      break;
-    }
-    case 'add-purchase': {
-      const page = el.closest('.fullpage');
-      const box = $('#purchaseList', page);
-      const i = box.children.length;
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.style.cssText = 'margin-bottom:9px;padding:12px';
-      div.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-size:12px;color:var(--sub)">第 ${i+1} 次</span>
-          <button class="icon-btn" style="width:28px;height:28px" data-rm>
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>
-          </button>
-        </div>
-        <div class="row2">
-          <label class="fld" style="margin-bottom:8px"><span class="fld-l">日期</span><input class="inp" type="date" value="${todayStr()}"></label>
-          <label class="fld" style="margin-bottom:8px"><span class="fld-l">实付金额</span><input class="inp" type="number" inputmode="decimal" placeholder="元"></label>
-        </div>
-        <label class="fld" style="margin-bottom:0"><span class="fld-l">重量 (g)</span><input class="inp" type="number" inputmode="decimal" placeholder="克"></label>`;
-      box.appendChild(div);
-      div.querySelector('[data-rm]').onclick = ()=> div.remove();
-      break;
-    }
-    case 'new-record': {
-      const mask = document.createElement('div');
-      mask.className = 'mask';
-      mask.innerHTML = `<div class="modal">
-        <h3>记一笔</h3>
-        <div class="pick-list">
-          <button class="pick-item" data-pick="brew">
-            <span class="pi-icon">${ICON.pour()}</span>
-            <span><span class="pi-t">制作咖啡</span><span class="pi-s">记录一次手冲 / 意式</span></span>
-          </button>
-          <button class="pick-item" data-pick="exp">
-            <span class="pi-icon">${ICON.shop()}</span>
-            <span><span class="pi-t">消费体验</span><span class="pi-s">记录一次门店体验</span></span>
-          </button>
-        </div>
-        <div class="m-btns" style="margin-top:14px">
-          <button class="btn ghost" data-close>取消</button>
-        </div>
-      </div>`;
-      document.body.appendChild(mask);
-      requestAnimationFrame(()=>mask.classList.add('in'));
-      mask.onclick = ev=>{
-        const p = ev.target.closest('[data-pick]');
-        if(p){
-          mask.classList.remove('in'); setTimeout(()=>mask.remove(),200);
-          setTimeout(()=>{ p.dataset.pick==='brew' ? openBrewForm(null) : openExpForm(null); }, 120);
-          return;
-        }
-        if(ev.target===mask || ev.target.closest('[data-close]')){
-          mask.classList.remove('in'); setTimeout(()=>mask.remove(),200);
-        }
-      };
-      break;
-    }
-    case 'edit-brew': openBrewForm(id); break;
-    case 'edit-exp':  openExpForm(id); break;
-    case 'del-brew': {
-      confirmModal('删除记录？','', ()=>{
-        state.brews = state.brews.filter(x=>x.id!==id);
-        saveState(); render(); toast('已删除');
-      });
-      break;
-    }
-    case 'del-exp': {
-      confirmModal('删除记录？','', ()=>{
-        state.experiences = state.experiences.filter(x=>x.id!==id);
-        saveState(); render(); toast('已删除');
-      });
-      break;
-    }
-    case 'save-brew': {
-      const page = el.closest('.fullpage');
-      const o = page._beforeSave ? page._beforeSave() : readForm(page);
-      if(!o.beanName && !o.beanId){ toast('请选择或输入豆子'); return; }
-      if(!o.beanName && o.beanId){
-        const b = state.beans.find(x=>x.id===o.beanId);
-        o.beanName = b ? b.name : '';
-      }
-      if(id){
-        Object.assign(state.brews.find(x=>x.id===id), o);
-      }else{
-        state.brews.push(Object.assign({ id:uid('brew'), createdAt:Date.now() }, o));
-      }
-      saveState();
-      page.querySelector('[data-close]').click();
-      toast('已保存');
-      setTimeout(render, 240);
-      break;
-    }
-    case 'save-exp': {
-      const page = el.closest('.fullpage');
-      const o = page._beforeSave ? page._beforeSave() : readForm(page);
-      if(id){
-        Object.assign(state.experiences.find(x=>x.id===id), o);
-      }else{
-        state.experiences.push(Object.assign({ id:uid('exp'), createdAt:Date.now() }, o));
-      }
-      saveState();
-      page.querySelector('[data-close]').click();
-      toast('已保存');
-      setTimeout(render, 240);
-      break;
-    }
-    case 'open-brew': {
-      const b = state.brews.find(x=>x.id===id);
-      if(!b) break;
-      openBrewDetail(b);
-      break;
-    }
-    case 'open-exp': {
-      const x = state.experiences.find(e=>e.id===id);
-      if(!x) break;
-      openFull('体验详情', `
-        <div class="card">
-          <div class="grid2">
-            <div class="full-row"><div class="k">店名</div><div class="v">${esc(x.shop||'—')}</div></div>
-            <div><div class="k">日期</div><div class="v">${esc(x.date||'—')}</div></div>
-            <div><div class="k">饮品</div><div class="v">${esc(x.drink||'—')}</div></div>
-            <div><div class="k">产地</div><div class="v">${esc(x.origin||'—')}</div></div>
-            <div><div class="k">烘焙度</div><div class="v">${esc(x.roastLevel||'—')}</div></div>
-            <div><div class="k">价格</div><div class="v">${x.price?'¥'+esc(String(x.price)):'—'}</div></div>
-            <div><div class="k">评分</div><div class="v" style="color:var(--focus)">${'★'.repeat(num(x.rating))||'—'}</div></div>
-            <div class="full-row"><div class="k">其他</div><div class="v">${esc(x.other||'—')}</div></div>
-          </div>
-          ${x.experience?`<div class="divider"></div>
-            <div class="k" style="font-size:11.5px;color:var(--sub)">体验</div>
-            <div style="font-size:13.5px;margin-top:3px;white-space:pre-wrap">${esc(x.experience)}</div>`:''}
-        </div>`);
-      break;
-    }
-    case 'toggle-recipe-dense': ui.recipeDense = !ui.recipeDense; render(); break;
-    case 'add-recipe': openRecipeForm(null); break;
-    case 'edit-recipe': openRecipeForm(id); break;
-    case 'open-recipe': ui.detail = { type:'recipe', id }; render(); window.scrollTo(0,0); break;
-    case 'del-recipe':
-      confirmModal('删除方案？','', ()=>{
-        state.recipes = state.recipes.filter(x=>x.id!==id);
-        saveState(); render(); toast('已删除');
-      });
-      break;
-    case 'pin-recipe': {
-      const r = state.recipes.find(x=>x.id===id);
-      if(r){ r.pinned = !r.pinned; saveState(); render(); toast(r.pinned?'已置顶':'已取消置顶'); }
-      break;
-    }
-    case 'save-recipe': {
-      const page = el.closest('.fullpage');
-      const o = page._beforeSave ? page._beforeSave() : readForm(page);
-      if(!o.title || !o.title.trim()){ toast('请填写方案名称'); return; }
-      if(id){
-        Object.assign(state.recipes.find(x=>x.id===id), o);
-      }else{
-        state.recipes.push(Object.assign({ id:uid('recipe'), pinned:false, createdAt:Date.now() }, o));
-      }
-      saveState();
-      page.querySelector('[data-close]').click();
-      toast('已保存');
-      setTimeout(render, 240);
-      break;
-    }
-    case 'pick-month': openMonthPicker(statsYM, v=>{ statsYM = v; render(); }); break;
-    case 'export-data': openExportModal(); break;
-    case 'import-data': openImportModal(); break;
-    case 'show-backup': {
-      const raw = localStorage.getItem(LS_KEY) || '{}';
-      openFull('备份数据', `<textarea class="inp" readonly style="height:60vh;font-size:11px">${esc(raw)}</textarea>`);
-      break;
-    }
-    case 'clear-data':
-      confirmModal('清空全部数据？','此操作不可恢复，建议先导出备份。', ()=>{
-        localStorage.removeItem(LS_KEY);
-        state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-        saveState(); render(); toast('已清空');
-      });
-      break;
-  }
-});
-
-function openBrewDetail(b){
-  const r = b.ratings || {};
-  openFull('冲煮详情', `
-    <div class="card">
-      <div class="card-top" style="margin-bottom:10px">
-        <div class="card-name" style="font-size:15px">${esc(b.beanName||'手冲')}</div>
-        <span class="tag tag-status">${esc(b.date||'')}</span>
-      </div>
-      <div class="grid2">
-        <div><div class="k">滤杯 / 咖啡机</div><div class="v">${esc(b.dripper||'—')}</div></div>
-        <div><div class="k">粉量</div><div class="v">${esc(String(b.dose||'—'))}${b.dose?' g':''}</div></div>
-        <div><div class="k">磨豆机</div><div class="v">${esc(b.grinder||'—')}</div></div>
-        <div><div class="k">研磨度</div><div class="v">${esc(b.grind||'—')}</div></div>
-        <div><div class="k">方式</div><div class="v">${esc(b.method||'—')}</div></div>
-        <div><div class="k">粉水比</div><div class="v">${b.ratio?'1:'+esc(String(b.ratio)):'—'}</div></div>
-        <div><div class="k">总水量</div><div class="v">${esc(String(b.totalWater||'—'))}${b.totalWater?' g':''}</div></div>
-        <div><div class="k">水温</div><div class="v">${esc(String(b.waterTemp||'—'))}${b.waterTemp?' ℃':''}</div></div>
-        <div><div class="k">总时长</div><div class="v">${esc(b.totalTime||'—')}</div></div>
-      </div>
-    </div>
-    <div class="card" style="margin-top:12px">
-      <div style="font-size:12px;color:var(--sub);margin-bottom:10px">口感评分</div>
-      <div class="rating-grid">
-        ${[['苦',r.bitter],['酸',r.sour],['甜感',r.sweet],['醇厚',r.body],['整体',r.overall]].map(([k,v])=>
-          `<div class="rating-row"><span class="rl">${k}</span>
-            <span style="color:var(--focus);font-size:15px;letter-spacing:2px">${'★'.repeat(num(v))}${'☆'.repeat(5-num(v))}</span>
-          </div>`).join('')}
-      </div>
-    </div>
-    ${ b.flavor?`<div class="card" style="margin-top:12px">
-      <div class="k" style="font-size:11.5px;color:var(--sub)">风味</div>
-      <div style="font-size:13.5px;margin-top:3px">${esc(b.flavor)}</div></div>`:'' }
-    ${ b.technique?`<div class="card" style="margin-top:12px">
-      <div class="k" style="font-size:11.5px;color:var(--sub)">手法备注</div>
-      <div style="font-size:13.5px;margin-top:3px;white-space:pre-wrap">${esc(b.technique)}</div></div>`:'' }
-    ${ b.notes?`<div class="card" style="margin-top:12px">
-      <div class="k" style="font-size:11.5px;color:var(--sub)">笔记</div>
-      <div style="font-size:13.5px;margin-top:3px;white-space:pre-wrap">${esc(b.notes)}</div></div>`:'' }
-    <div class="btn-row" style="margin-top:20px">
-      <button class="btn ghost" data-act="edit-brew" data-id="${b.id}">修改</button>
-    </div>
-  `);
-}
-
-function confirmModal(title, sub, onOk){
-  const mask = document.createElement('div');
-  mask.className = 'mask';
-  mask.innerHTML = `<div class="modal">
-    <h3>${esc(title)}</h3>
-    ${sub?`<p style="margin:0 0 14px;font-size:13.5px;color:var(--sub)">${esc(sub)}</p>`:''}
-    <div class="m-btns">
-      <button class="btn ghost" data-no>取消</button>
-      <button class="btn danger" data-yes>确定</button>
-    </div>
-  </div>`;
-  document.body.appendChild(mask);
-  requestAnimationFrame(()=>mask.classList.add('in'));
-  mask.onclick = e=>{
-    if(e.target.closest('[data-yes]')){ close(); onOk(); return; }
-    if(e.target===mask || e.target.closest('[data-no]')) close();
-  };
-  function close(){ mask.classList.remove('in'); setTimeout(()=>mask.remove(),200); }
-}
-
-function renderDetail(){
-  if(!ui.detail) return '';
-  if(ui.detail.type === 'bean'){
-    const b = state.beans.find(x=>x.id===ui.detail.id);
-    if(!b){ ui.detail = null; return viewBeans(); }
-    return renderBeanDetail(b);
-  }
-  if(ui.detail.type === 'recipe'){
-    const r = state.recipes.find(x=>x.id===ui.detail.id);
-    if(!r){ ui.detail = null; return viewRecipes(); }
-    return renderRecipeDetail(r);
-  }
-  return '';
-}
-
-/* ========== 启动 ========== */
-applyTheme(state.settings.theme);
-render();
-</script>
-</body>
-</html>
+      rating: r.rating ||
