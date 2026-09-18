@@ -2112,4 +2112,148 @@ document.addEventListener('click', e=>{
             <div class="full-row"><div class="k">店名</div><div class="v">${esc(x.shop||'—')}</div></div>
             <div><div class="k">日期</div><div class="v">${esc(x.date||'—')}</div></div>
             <div><div class="k">饮品</div><div class="v">${esc(x.drink||'—')}</div></div>
-            <div><div class="k">产地</div><div
+            <div><div class="k">产地</div><div class="v">${esc(x.origin||'—')}</div></div>
+            <div><div class="k">烘焙度</div><div class="v">${esc(x.roastLevel||'—')}</div></div>
+            <div><div class="k">价格</div><div class="v">${x.price?'¥'+esc(String(x.price)):'—'}</div></div>
+            <div><div class="k">评分</div><div class="v" style="color:var(--focus)">${'★'.repeat(num(x.rating))||'—'}</div></div>
+            <div class="full-row"><div class="k">其他</div><div class="v">${esc(x.other||'—')}</div></div>
+          </div>
+          ${x.experience?`<div class="divider"></div>
+            <div class="k" style="font-size:11.5px;color:var(--sub)">体验</div>
+            <div style="font-size:13.5px;margin-top:3px;white-space:pre-wrap">${esc(x.experience)}</div>`:''}
+        </div>`);
+      break;
+    }
+    case 'toggle-recipe-dense': ui.recipeDense = !ui.recipeDense; render(); break;
+    case 'add-recipe': openRecipeForm(null); break;
+    case 'edit-recipe': openRecipeForm(id); break;
+    case 'open-recipe': ui.detail = { type:'recipe', id }; render(); window.scrollTo(0,0); break;
+    case 'del-recipe':
+      confirmModal('删除方案？','', ()=>{
+        state.recipes = state.recipes.filter(x=>x.id!==id);
+        saveState(); render(); toast('已删除');
+      });
+      break;
+    case 'pin-recipe': {
+      const r = state.recipes.find(x=>x.id===id);
+      if(r){ r.pinned = !r.pinned; saveState(); render(); toast(r.pinned?'已置顶':'已取消置顶'); }
+      break;
+    }
+    case 'save-recipe': {
+      const page = el.closest('.fullpage');
+      const o = page._beforeSave ? page._beforeSave() : readForm(page);
+      if(!o.title || !o.title.trim()){ toast('请填写方案名称'); return; }
+      if(id){
+        Object.assign(state.recipes.find(x=>x.id===id), o);
+      }else{
+        state.recipes.push(Object.assign({ id:uid('recipe'), pinned:false, createdAt:Date.now() }, o));
+      }
+      saveState();
+      page.querySelector('[data-close]').click();
+      toast('已保存');
+      setTimeout(render, 240);
+      break;
+    }
+    case 'pick-month': openMonthPicker(statsYM, v=>{ statsYM = v; render(); }); break;
+    case 'export-data': openExportModal(); break;
+    case 'import-data': openImportModal(); break;
+    case 'show-backup': {
+      const raw = localStorage.getItem(LS_KEY) || '{}';
+      openFull('备份数据', `<textarea class="inp" readonly style="height:60vh;font-size:11px">${esc(raw)}</textarea>`);
+      break;
+    }
+    case 'clear-data':
+      confirmModal('清空全部数据？','此操作不可恢复，建议先导出备份。', ()=>{
+        localStorage.removeItem(LS_KEY);
+        state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        saveState(); render(); toast('已清空');
+      });
+      break;
+  }
+});
+
+function openBrewDetail(b){
+  const r = b.ratings || {};
+  openFull('冲煮详情', `
+    <div class="card">
+      <div class="card-top" style="margin-bottom:10px">
+        <div class="card-name" style="font-size:15px">${esc(b.beanName||'手冲')}</div>
+        <span class="tag tag-status">${esc(b.date||'')}</span>
+      </div>
+      <div class="grid2">
+        <div><div class="k">滤杯 / 咖啡机</div><div class="v">${esc(b.dripper||'—')}</div></div>
+        <div><div class="k">粉量</div><div class="v">${esc(String(b.dose||'—'))}${b.dose?' g':''}</div></div>
+        <div><div class="k">磨豆机</div><div class="v">${esc(b.grinder||'—')}</div></div>
+        <div><div class="k">研磨度</div><div class="v">${esc(b.grind||'—')}</div></div>
+        <div><div class="k">方式</div><div class="v">${esc(b.method||'—')}</div></div>
+        <div><div class="k">粉水比</div><div class="v">${b.ratio?'1:'+esc(String(b.ratio)):'—'}</div></div>
+        <div><div class="k">总水量</div><div class="v">${esc(String(b.totalWater||'—'))}${b.totalWater?' g':''}</div></div>
+        <div><div class="k">水温</div><div class="v">${esc(String(b.waterTemp||'—'))}${b.waterTemp?' ℃':''}</div></div>
+        <div><div class="k">总时长</div><div class="v">${esc(b.totalTime||'—')}</div></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <div style="font-size:12px;color:var(--sub);margin-bottom:10px">口感评分</div>
+      <div class="rating-grid">
+        ${[['苦',r.bitter],['酸',r.sour],['甜感',r.sweet],['醇厚',r.body],['整体',r.overall]].map(([k,v])=>
+          `<div class="rating-row"><span class="rl">${k}</span>
+            <span style="color:var(--focus);font-size:15px;letter-spacing:2px">${'★'.repeat(num(v))}${'☆'.repeat(5-num(v))}</span>
+          </div>`).join('')}
+      </div>
+    </div>
+    ${ b.flavor?`<div class="card" style="margin-top:12px">
+      <div class="k" style="font-size:11.5px;color:var(--sub)">风味</div>
+      <div style="font-size:13.5px;margin-top:3px">${esc(b.flavor)}</div></div>`:'' }
+    ${ b.technique?`<div class="card" style="margin-top:12px">
+      <div class="k" style="font-size:11.5px;color:var(--sub)">手法备注</div>
+      <div style="font-size:13.5px;margin-top:3px;white-space:pre-wrap">${esc(b.technique)}</div></div>`:'' }
+    ${ b.notes?`<div class="card" style="margin-top:12px">
+      <div class="k" style="font-size:11.5px;color:var(--sub)">笔记</div>
+      <div style="font-size:13.5px;margin-top:3px;white-space:pre-wrap">${esc(b.notes)}</div></div>`:'' }
+    <div class="btn-row" style="margin-top:20px">
+      <button class="btn ghost" data-act="edit-brew" data-id="${b.id}">修改</button>
+    </div>
+  `);
+}
+
+function confirmModal(title, sub, onOk){
+  const mask = document.createElement('div');
+  mask.className = 'mask';
+  mask.innerHTML = `<div class="modal">
+    <h3>${esc(title)}</h3>
+    ${sub?`<p style="margin:0 0 14px;font-size:13.5px;color:var(--sub)">${esc(sub)}</p>`:''}
+    <div class="m-btns">
+      <button class="btn ghost" data-no>取消</button>
+      <button class="btn danger" data-yes>确定</button>
+    </div>
+  </div>`;
+  document.body.appendChild(mask);
+  requestAnimationFrame(()=>mask.classList.add('in'));
+  mask.onclick = e=>{
+    if(e.target.closest('[data-yes]')){ close(); onOk(); return; }
+    if(e.target===mask || e.target.closest('[data-no]')) close();
+  };
+  function close(){ mask.classList.remove('in'); setTimeout(()=>mask.remove(),200); }
+}
+
+function renderDetail(){
+  if(!ui.detail) return '';
+  if(ui.detail.type === 'bean'){
+    const b = state.beans.find(x=>x.id===ui.detail.id);
+    if(!b){ ui.detail = null; return viewBeans(); }
+    return renderBeanDetail(b);
+  }
+  if(ui.detail.type === 'recipe'){
+    const r = state.recipes.find(x=>x.id===ui.detail.id);
+    if(!r){ ui.detail = null; return viewRecipes(); }
+    return renderRecipeDetail(r);
+  }
+  return '';
+}
+
+/* ========== 启动 ========== */
+applyTheme(state.settings.theme);
+render();
+</script>
+</body>
+</html>
