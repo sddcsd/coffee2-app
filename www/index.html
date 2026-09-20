@@ -54,10 +54,11 @@ input,textarea,select{outline:none;appearance:none;-webkit-appearance:none}
 .fab svg{width:22px;height:22px}
 .fab:active{transform:translateX(-50%) scale(.93)}
 
-.fab-back{position:fixed;right:20px;bottom:30px;z-index:160;width:52px;height:52px;border-radius:50%;
+/* 悬浮返回按钮（右下角） */
+.fab-back{position:fixed;right:20px;bottom:90px;z-index:160;width:52px;height:52px;border-radius:50%;
   border:1px solid var(--line);background:var(--card);color:var(--accent);
   display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.22);
-  opacity:.85;transition:opacity .15s,transform .15s}
+  opacity:.9;transition:opacity .15s,transform .15s}
 .fab-back:active{transform:scale(.92);opacity:1}
 .fab-back svg{width:22px;height:22px}
 body.theme-dark .fab-back{background:#1E2030;color:#B8CEE2;border-color:#33374D}
@@ -67,11 +68,11 @@ body.theme-dark .fab-back{background:#1E2030;color:#B8CEE2;border-color:#33374D}
   font-size:12.5px;cursor:pointer;font-weight:500;transition:.16s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .status-tabs button.on{background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.08);font-weight:700}
 
-/* 快捷状态行（胶囊） */
-.quick-status{display:flex;gap:4px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+/* 快捷状态行（胶囊）—— 只在新建/修改表单里使用 */
+.quick-status{display:flex;gap:6px}
 .quick-status.bare{margin-top:0;padding-top:0;border-top:0}
 .qs-btn{flex:1 1 0;min-width:0;border:1px solid var(--line);background:var(--card2);color:var(--sub);
-  border-radius:999px;padding:6px 2px;font-size:11.5px;cursor:pointer;transition:.15s;
+  border-radius:999px;padding:8px 4px;font-size:12.5px;cursor:pointer;transition:.15s;
   line-height:1.4;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
 .qs-btn:active{transform:scale(.96)}
 .qs-btn.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
@@ -175,7 +176,7 @@ textarea.inp{resize:vertical;min-height:70px;line-height:1.55}
   background:var(--bg);border-bottom:1px solid var(--line);flex:0 0 auto}
 .fp-title{flex:1;margin:0;font-size:17px;font-weight:700;color:var(--deep);text-align:center;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fp-body{flex:1;overflow-y:auto;padding:16px 14px calc(40px + env(safe-area-inset-bottom));
+.fp-body{flex:1;overflow-y:auto;padding:16px 14px calc(90px + env(safe-area-inset-bottom));
   max-width:640px;width:100%;margin:0 auto;-webkit-overflow-scrolling:touch}
 
 .mask{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:200;display:flex;align-items:center;
@@ -432,29 +433,19 @@ function toCountry(s){
   return null;
 }
 
-/* ===== 快捷状态行：四个胶囊等宽一行，点击不会冒泡到卡片 ===== */
-function quickStatusHTML(b, bare){
-  const statuses = [
-    {k:'drinking', label:'在喝'},
-    {k:'stock',    label:'囤豆中'},
-    {k:'done',     label:'喝完'}
-  ];
-  return `<div class="quick-status ${bare?'bare':''}">
-    ${statuses.map(s=>`<button type="button" class="qs-btn ${b.status===s.k?'on':''}"
-      data-act="set-bean-status" data-id="${b.id}" data-status="${s.k}"
-      onclick="event.stopPropagation()">${s.label}</button>`).join('')}
-    <button type="button" class="qs-btn ${b.friendShare?'on':''}"
-      data-act="toggle-bean-friend" data-id="${b.id}"
-      onclick="event.stopPropagation()">朋友分享</button>
-  </div>`;
-}
-
 function render(){
   applyTheme(state.settings.theme);
   renderTabbar();
+  document.querySelectorAll('body > .fab-back[data-render-back]').forEach(el=>el.remove());
   const v = $('#view');
   if(ui.detail){
     v.innerHTML = renderDetail();
+    const back = document.createElement('button');
+    back.className = 'fab-back';
+    back.setAttribute('data-render-back', '1');
+    back.innerHTML = ICON.back();
+    back.onclick = ()=>{ ui.detail = null; render(); window.scrollTo(0,0); };
+    document.body.appendChild(back);
   }else{
     switch(ui.tab){
       case 'home':    v.innerHTML = viewHome();    break;
@@ -647,7 +638,6 @@ function beanCard(b){
         </div>
       </div>
       ${body}
-      ${quickStatusHTML(b)}
     </div>
   </div>`;
 }
@@ -724,8 +714,8 @@ function renderBeanDetail(b){
   }
   return `
   <div class="page-head">
-    <button class="icon-btn" data-act="close-detail">${ICON.back()}</button>
-    <h1 class="title" style="font-size:18px">${esc(b.name||'未命名')}</h1>
+    <span style="width:36px;flex:0 0 36px"></span>
+    <h1 class="title" style="font-size:18px;text-align:center">${esc(b.name||'未命名')}</h1>
     <span style="width:36px;flex:0 0 36px"></span>
   </div>
   <div class="card">
@@ -735,8 +725,6 @@ function renderBeanDetail(b){
         <span class="tag tag-focus">${b.isBlend?'拼配':'单品'}</span>
       </div>
     </div>
-    ${quickStatusHTML(b, true)}
-    <div class="divider"></div>
     ${base}
     ${purchases.length?`<div class="divider"></div>
       <div style="font-size:12px;color:var(--sub);margin-bottom:8px">购买记录</div>
@@ -814,13 +802,14 @@ function openBeanForm(id){
       <label class="fld" style="display:none"><span class="fld-l">烘焙日期</span>
         <input class="inp" type="date" data-k="roastDate" value="${esc(d.roastDate)}"></label>
     </div>
-    <label class="fld"><span class="fld-l">状态</span>
-      <select class="inp" data-k="status">
-        ${STATUS_KEYS.map(k=>`<option value="${k}" ${d.status===k?'selected':''}>${STATUS[k]}</option>`).join('')}
-      </select></label>
-    <div class="chk ${d.friendShare?'on':''}" data-act="toggle-friend">
-      <span class="box">${ICON.check()}</span>
-      <span class="lbl">朋友分享${d.friendShare?' ✓':''}</span>
+    <div class="fld">
+      <span class="fld-l">状态</span>
+      <div class="quick-status bare" id="formStatusRow">
+        <button type="button" class="qs-btn ${d.status==='drinking'?'on':''}" data-status="drinking">在喝</button>
+        <button type="button" class="qs-btn ${d.status==='stock'?'on':''}" data-status="stock">囤豆中</button>
+        <button type="button" class="qs-btn ${d.status==='done'?'on':''}" data-status="done">喝完</button>
+        <button type="button" class="qs-btn ${d.friendShare?'on':''}" data-friend="1">朋友分享</button>
+      </div>
     </div>
     <div class="divider"></div>
     <div style="font-size:12px;color:var(--sub);margin-bottom:8px">购买记录</div>
@@ -838,6 +827,19 @@ function openBeanForm(id){
       <button class="btn" data-act="save-bean" data-id="${id||''}">保存</button>
     </div>
   `);
+
+  /* 四个胶囊按钮点击 */
+  $$('#formStatusRow .qs-btn', page).forEach(btn=>{
+    btn.onclick = ()=>{
+      if(btn.hasAttribute('data-friend')){
+        btn.classList.toggle('on');
+      }else{
+        $$('#formStatusRow .qs-btn[data-status]', page).forEach(b=>b.classList.remove('on'));
+        btn.classList.add('on');
+      }
+    };
+  });
+
   let blendParts = (d.blendParts||[]).map(x=>({...x}));
   let purchases  = (d.purchases||[]).map(x=>({...x}));
   function renderBlendParts(){
@@ -898,7 +900,9 @@ function openBeanForm(id){
   page._beforeSave = ()=>{
     const o = readForm(page);
     o.isBlend = $('[data-act="toggle-blend"]', page).classList.contains('on');
-    o.friendShare = $('[data-act="toggle-friend"]', page).classList.contains('on');
+    const activeStatus = $('#formStatusRow .qs-btn[data-status].on', page);
+    o.status = activeStatus ? activeStatus.dataset.status : 'drinking';
+    o.friendShare = $('#formStatusRow .qs-btn[data-friend]', page).classList.contains('on');
     o.blendParts = blendParts;
     o.purchases  = purchases;
     return o;
@@ -1272,8 +1276,8 @@ function recipeCard(r){
 function renderRecipeDetail(r){
   return `
   <div class="page-head">
-    <button class="icon-btn" data-act="close-detail">${ICON.back()}</button>
-    <h1 class="title" style="font-size:18px">${esc(r.title||'方案')}</h1>
+    <span style="width:36px;flex:0 0 36px"></span>
+    <h1 class="title" style="font-size:18px;text-align:center">${esc(r.title||'方案')}</h1>
     <span style="width:36px;flex:0 0 36px"></span>
   </div>
   <div class="card">
@@ -1829,7 +1833,7 @@ function openFull(title, bodyHTML){
   el.className = 'fullpage';
   el.innerHTML = `
     <div class="fp-head">
-      <button class="icon-btn" data-close>${ICON.back()}</button>
+      <span style="width:36px;flex:0 0 36px"></span>
       <h2 class="fp-title">${esc(title)}</h2>
       <span style="width:36px;flex:0 0 36px"></span>
     </div>
@@ -1962,24 +1966,6 @@ document.addEventListener('click', e=>{
       ui.beanBrewsOpen = !(ui.beanBrewsOpen !== false);
       render();
       break;
-    case 'set-bean-status': {
-      const b = state.beans.find(x=>x.id===id);
-      if(b){
-        b.status = el.dataset.status;
-        saveState();
-        render();
-      }
-      break;
-    }
-    case 'toggle-bean-friend': {
-      const b = state.beans.find(x=>x.id===id);
-      if(b){
-        b.friendShare = !b.friendShare;
-        saveState();
-        render();
-      }
-      break;
-    }
     case 'set-theme': {
       state.settings.theme = el.dataset.key;
       saveState(); applyTheme(state.settings.theme);
