@@ -54,7 +54,6 @@ input,textarea,select{outline:none;appearance:none;-webkit-appearance:none}
 .fab svg{width:22px;height:22px}
 .fab:active{transform:translateX(-50%) scale(.93)}
 
-/* 全屏页悬浮返回按钮 */
 .fab-back{position:fixed;right:20px;bottom:30px;z-index:160;width:52px;height:52px;border-radius:50%;
   border:1px solid var(--line);background:var(--card);color:var(--accent);
   display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.22);
@@ -63,13 +62,21 @@ input,textarea,select{outline:none;appearance:none;-webkit-appearance:none}
 .fab-back svg{width:22px;height:22px}
 body.theme-dark .fab-back{background:#1E2030;color:#B8CEE2;border-color:#33374D}
 
-/* 豆仓状态标签 */
 .status-tabs{display:flex;gap:4px;margin-bottom:10px;background:var(--card2);padding:4px;border-radius:12px}
 .status-tabs button{flex:1;border:0;background:transparent;color:var(--sub);padding:8px 4px;border-radius:9px;
   font-size:12.5px;cursor:pointer;font-weight:500;transition:.16s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .status-tabs button.on{background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.08);font-weight:700}
 
-/* 搜索框 */
+/* 快捷状态行（胶囊） */
+.quick-status{display:flex;gap:4px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.quick-status.bare{margin-top:0;padding-top:0;border-top:0}
+.qs-btn{flex:1 1 0;min-width:0;border:1px solid var(--line);background:var(--card2);color:var(--sub);
+  border-radius:999px;padding:6px 2px;font-size:11.5px;cursor:pointer;transition:.15s;
+  line-height:1.4;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.qs-btn:active{transform:scale(.96)}
+.qs-btn.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+body.theme-dark .qs-btn.on{color:#161823}
+
 .search-bar{position:relative;margin-bottom:10px}
 .search-bar input{width:100%;padding:10px 38px 10px 36px;border:1px solid var(--line);background:var(--card);
   border-radius:12px;font-size:14px;color:var(--text)}
@@ -116,7 +123,6 @@ body.theme-dark .fab-back{background:#1E2030;color:#B8CEE2;border-color:#33374D}
 .full-row{grid-column:1/-1}
 .divider{height:1px;background:var(--line);margin:12px 0}
 
-/* 拼配表格 */
 .blend-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px;
   border-radius:10px;overflow:hidden;border:1px solid var(--line)}
 .blend-table th{background:var(--card2);color:var(--sub);font-weight:500;font-size:11.5px;
@@ -218,7 +224,6 @@ textarea.inp{resize:vertical;min-height:70px;line-height:1.55}
 .stat-big .sb-k{font-size:11.5px;color:var(--sub);margin-top:2px}
 .stat-title{font-size:13px;color:var(--sub);margin:16px 2px 8px;font-weight:600}
 
-/* 统计三项左中右 */
 .stat-triple{display:flex;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
   overflow:hidden;margin-bottom:12px}
 .stat-triple .st-item{flex:1;padding:14px 4px;text-align:center;border-right:1px solid var(--line);min-width:0}
@@ -232,7 +237,6 @@ textarea.inp{resize:vertical;min-height:70px;line-height:1.55}
 .bar-line .bl-fill{height:100%;background:var(--accent);border-radius:8px;min-width:2px}
 .bar-line .bl-val{width:52px;text-align:right;flex:0 0 auto;color:var(--text);font-variant-numeric:tabular-nums}
 
-/* 年度竖向柱状图 */
 .vchart{background:var(--card);border-radius:var(--radius);padding:14px 12px 10px;box-shadow:var(--shadow)}
 .vchart-head{font-size:12px;color:var(--sub);margin-bottom:10px;display:flex;justify-content:space-between}
 .vchart-wrap{display:flex;gap:6px;height:160px}
@@ -252,7 +256,6 @@ textarea.inp{resize:vertical;min-height:70px;line-height:1.55}
 .chart-legend{display:flex;gap:16px;margin-top:10px;font-size:11.5px;color:var(--sub);justify-content:center}
 .chart-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
 
-/* 深色主题下标签文字自动适配为深色，确保高对比度 */
 body.theme-dark .tag-status,
 body.theme-dark .tag-focus,
 body.theme-dark .tag-friend {
@@ -268,7 +271,6 @@ body.theme-dark .tag-friend {
 </div>
 
 <script>
-/* ========== 工具 ========== */
 const $  = (s,el=document)=>el.querySelector(s);
 const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
 const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -284,7 +286,6 @@ function toast(msg){
   t._tm = setTimeout(()=>t.classList.remove('in'), 1900);
 }
 
-/* ========== 图标 ========== */
 const STAR_PATH = 'M12 2.5l2.95 6.13 6.55.91-4.75 4.62 1.12 6.59L12 17.66l-5.87 3.09 1.12-6.59L2.5 9.54l6.55-.91z';
 const ICON = {
   bean: (fill='var(--card)') => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -314,7 +315,6 @@ const ICON = {
   starSolid: () => `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"><path d="${STAR_PATH}"/></svg>`
 };
 
-/* ========== 数据层 ========== */
 const LS_KEY = 'coffee_notes_v2';
 const DEFAULT_STATE = {
   settings:{ appName:'咖啡小记', theme:'pink' },
@@ -351,7 +351,6 @@ function saveState(){
   }catch(e){ toast('存储失败'); }
 }
 
-/* ========== 主题 ========== */
 const THEMES = {
   pink:   { name:'欧元粉', h:358, accent:'#B34C4E', focus:'#E29A91', deep:'#673D47' },
   blue:   { name:'欧元蓝', h:210, accent:'#326FAD', focus:'#87B8D8', deep:'#29475F' },
@@ -386,7 +385,6 @@ function applyTheme(key){
   }
 }
 
-/* ========== 计算 ========== */
 const STATUS = { drinking:'在喝', stock:'囤豆中', done:'喝完' };
 const STATUS_KEYS = ['drinking','stock','done'];
 
@@ -434,7 +432,23 @@ function toCountry(s){
   return null;
 }
 
-/* ========== 渲染骨架 ========== */
+/* ===== 快捷状态行：四个胶囊等宽一行，点击不会冒泡到卡片 ===== */
+function quickStatusHTML(b, bare){
+  const statuses = [
+    {k:'drinking', label:'在喝'},
+    {k:'stock',    label:'囤豆中'},
+    {k:'done',     label:'喝完'}
+  ];
+  return `<div class="quick-status ${bare?'bare':''}">
+    ${statuses.map(s=>`<button type="button" class="qs-btn ${b.status===s.k?'on':''}"
+      data-act="set-bean-status" data-id="${b.id}" data-status="${s.k}"
+      onclick="event.stopPropagation()">${s.label}</button>`).join('')}
+    <button type="button" class="qs-btn ${b.friendShare?'on':''}"
+      data-act="toggle-bean-friend" data-id="${b.id}"
+      onclick="event.stopPropagation()">朋友分享</button>
+  </div>`;
+}
+
 function render(){
   applyTheme(state.settings.theme);
   renderTabbar();
@@ -472,7 +486,6 @@ function afterRender(){
   $$('.swipe').forEach(attachSwipe);
 }
 
-/* ========== 首页 ========== */
 function viewHome(){
   const name = state.settings.appName || '咖啡小记';
   const drinking = state.beans.filter(b=>b.status==='drinking');
@@ -528,7 +541,6 @@ function viewHome(){
   `;
 }
 
-/* ========== 豆仓 ========== */
 function viewBeans(){
   const counts = {
     drinking: state.beans.filter(b=>b.status==='drinking').length,
@@ -577,7 +589,6 @@ function renderBeanList(){
     : `<div class="empty">${q?'没有匹配的豆子':'这个分类还没有豆子'}</div>`;
 }
 
-/* 拼配表格 */
 function blendTableHTML(parts){
   const rows = (parts||[]).filter(x=>x.origin||x.variety||x.process);
   if(!rows.length) return '';
@@ -632,17 +643,15 @@ function beanCard(b){
       <div class="card-top">
         <div class="card-name">${esc(b.name||'未命名')}</div>
         <div class="card-tags">
-          ${b.friendShare?`<span class="tag tag-friend">朋友分享</span>`:''}
-          <span class="tag tag-status">${STATUS[b.status]||'在喝'}</span>
           <span class="tag tag-focus">${b.isBlend?'拼配':'单品'}</span>
         </div>
       </div>
       ${body}
+      ${quickStatusHTML(b)}
     </div>
   </div>`;
 }
 
-/* 搜索/标签切换的 DOM 局部刷新 */
 window.__searchBean = function(val){
   ui.searchBean = val;
   const el = $('#beanList');
@@ -678,7 +687,6 @@ window.__clearSearch = function(which){
   }
 };
 
-/* 豆子详情 */
 function renderBeanDetail(b){
   const p = priceInfo(b);
   const purchases = [...(b.purchases||[])].sort((a,b2)=>(b2.date||'').localeCompare(a.date||''));
@@ -721,14 +729,14 @@ function renderBeanDetail(b){
     <span style="width:36px;flex:0 0 36px"></span>
   </div>
   <div class="card">
-    <div class="card-top" style="margin-bottom:4px">
+    <div class="card-top" style="margin-bottom:10px">
       <div class="card-name" style="font-size:15px">基础信息</div>
       <div class="card-tags">
-        ${b.friendShare?`<span class="tag tag-friend">朋友分享</span>`:''}
-        <span class="tag tag-status">${STATUS[b.status]||'在喝'}</span>
         <span class="tag tag-focus">${b.isBlend?'拼配':'单品'}</span>
       </div>
     </div>
+    ${quickStatusHTML(b, true)}
+    <div class="divider"></div>
     ${base}
     ${purchases.length?`<div class="divider"></div>
       <div style="font-size:12px;color:var(--sub);margin-bottom:8px">购买记录</div>
@@ -897,7 +905,6 @@ function openBeanForm(id){
   };
 }
 
-/* ========== 记一笔 ========== */
 function viewRecord(){
   return `
   <div class="page-head">
@@ -1077,7 +1084,6 @@ function openBrewForm(id){
   };
   $$('[data-hist]', page).forEach(inp=> attachHistory(inp));
 
-  // 粉水比联动
   const doseEl = $('[data-k="dose"]', page);
   const ratioEl = $('[data-k="ratio"]', page);
   const waterEl = $('[data-k="totalWater"]', page);
@@ -1175,7 +1181,6 @@ function openExpForm(id){
   page._beforeSave = ()=> readForm(page);
 }
 
-/* ========== 冲煮方案 ========== */
 function viewRecipes(){
   return `
   <div class="page-head">
@@ -1351,7 +1356,6 @@ function openRecipeForm(id){
   page._beforeSave = ()=> readForm(page);
 }
 
-/* ========== 统计 ========== */
 let statsYM = todayStr().slice(0,7);
 function viewStats(){
   const [y, m] = statsYM.split('-').map(Number);
@@ -1536,7 +1540,6 @@ function openMonthPicker(cur, cb){
   function close(){ mask.classList.remove('in'); setTimeout(()=>mask.remove(),200); }
 }
 
-/* ========== 设置 ========== */
 function openSettings(){
   const s = state.settings;
   const page = openFull('设置', `
@@ -1582,7 +1585,6 @@ function openSettings(){
   page._refreshTheme = drawThemes;
 }
 
-/* ========== 数据迁移 ========== */
 function migrateOldData(d) {
   const mapTheme = t => {
     if (!t) return 'pink';
@@ -1721,7 +1723,6 @@ function migrateOldData(d) {
   return newState;
 }
 
-/* ========== 导入导出 ========== */
 function openExportModal(){
   const data = JSON.stringify({
     settings:state.settings, beans:state.beans, brews:state.brews,
@@ -1823,7 +1824,6 @@ async function copyText(text){
   }catch(e){ toast('复制失败，请手动长按选择'); }
 }
 
-/* ========== 全屏页 / 读表单 / 历史下拉 ========== */
 function openFull(title, bodyHTML){
   const el = document.createElement('div');
   el.className = 'fullpage';
@@ -1892,7 +1892,6 @@ function showHist(input, key){
   });
 }
 
-/* ========== 滑动操作 ========== */
 function attachSwipe(el){
   const content = $('.swipe-content', el);
   if(!content) return;
@@ -1944,7 +1943,6 @@ function attachSwipe(el){
   }, true);
 }
 
-/* ========== 全局事件 ========== */
 document.addEventListener('click', e=>{
   const el = e.target.closest('[data-act]');
   if(!el) return;
@@ -1964,6 +1962,24 @@ document.addEventListener('click', e=>{
       ui.beanBrewsOpen = !(ui.beanBrewsOpen !== false);
       render();
       break;
+    case 'set-bean-status': {
+      const b = state.beans.find(x=>x.id===id);
+      if(b){
+        b.status = el.dataset.status;
+        saveState();
+        render();
+      }
+      break;
+    }
+    case 'toggle-bean-friend': {
+      const b = state.beans.find(x=>x.id===id);
+      if(b){
+        b.friendShare = !b.friendShare;
+        saveState();
+        render();
+      }
+      break;
+    }
     case 'set-theme': {
       state.settings.theme = el.dataset.key;
       saveState(); applyTheme(state.settings.theme);
@@ -2308,7 +2324,6 @@ function renderDetail(){
   return '';
 }
 
-/* ========== 启动 ========== */
 applyTheme(state.settings.theme);
 render();
 </script>
