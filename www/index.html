@@ -54,6 +54,15 @@ input,textarea,select{outline:none;appearance:none;-webkit-appearance:none}
 .fab svg{width:22px;height:22px}
 .fab:active{transform:translateX(-50%) scale(.93)}
 
+/* 全屏页悬浮返回按钮 */
+.fab-back{position:fixed;right:20px;bottom:30px;z-index:160;width:52px;height:52px;border-radius:50%;
+  border:1px solid var(--line);background:var(--card);color:var(--accent);
+  display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.22);
+  opacity:.85;transition:opacity .15s,transform .15s}
+.fab-back:active{transform:scale(.92);opacity:1}
+.fab-back svg{width:22px;height:22px}
+body.theme-dark .fab-back{background:#1E2030;color:#B8CEE2;border-color:#33374D}
+
 /* 豆仓状态标签 */
 .status-tabs{display:flex;gap:4px;margin-bottom:10px;background:var(--card2);padding:4px;border-radius:12px}
 .status-tabs button{flex:1;border:0;background:transparent;color:var(--sub);padding:8px 4px;border-radius:9px;
@@ -316,7 +325,8 @@ let state = loadState();
 let ui = {
   tab:'home', beanDense:false, recipeDense:false, detail:null,
   beanTab:'drinking',
-  searchBean:'', searchRecord:'', searchRecipe:''
+  searchBean:'', searchRecord:'', searchRecipe:'',
+  beanBrewsOpen: true
 };
 
 function loadState(){
@@ -675,6 +685,7 @@ function renderBeanDetail(b){
   const latestPurchase = purchases[0] || {};
   const brews = state.brews.filter(x=>x.beanId===b.id)
     .sort((a,c)=>(c.date||'').localeCompare(a.date||''));
+  const brewOpen = ui.beanBrewsOpen !== false;
   let base = '';
   if(b.isBlend){
     base = `<div class="grid2">
@@ -707,7 +718,7 @@ function renderBeanDetail(b){
   <div class="page-head">
     <button class="icon-btn" data-act="close-detail">${ICON.back()}</button>
     <h1 class="title" style="font-size:18px">${esc(b.name||'未命名')}</h1>
-    <button class="icon-btn sm" data-act="edit-bean" data-id="${b.id}">${ICON.gear()}</button>
+    <span style="width:36px;flex:0 0 36px"></span>
   </div>
   <div class="card">
     <div class="card-top" style="margin-bottom:4px">
@@ -737,8 +748,11 @@ function renderBeanDetail(b){
     <div class="k" style="font-size:11.5px;color:var(--sub)">笔记</div>
     <div style="font-size:13.5px;margin-top:3px;white-space:pre-wrap">${esc(b.note)}</div>
   </div>`:'' }
-  <div class="stat-title">冲煮记录 (${brews.length})</div>
-  ${ brews.length ? brews.map(x=>`
+  <div class="stat-title" style="display:flex;align-items:center;justify-content:space-between">
+    <span>冲煮记录 (${brews.length})</span>
+    <button class="pill-toggle" data-act="toggle-bean-brews">${brewOpen?'隐藏':'展开'}</button>
+  </div>
+  ${ brewOpen ? (brews.length ? brews.map(x=>`
     <div class="card" style="margin-bottom:9px" data-act="open-brew" data-id="${x.id}">
       <div style="display:flex;justify-content:space-between;gap:10px">
         <div style="font-size:13.5px;font-weight:600">${esc(x.date||'')}</div>
@@ -747,7 +761,10 @@ function renderBeanDetail(b){
           ${esc([x.flavor, x.notes].filter(Boolean).join(' · ')||'—')}
         </div>
       </div>
-    </div>`).join('') : `<div class="empty">还没有冲煮记录</div>` }
+    </div>`).join('') : `<div class="empty">还没有冲煮记录</div>`) : '' }
+  <div class="btn-row" style="margin-top:20px">
+    <button class="btn" data-act="edit-bean" data-id="${b.id}">修改豆子</button>
+  </div>
   `;
 }
 
@@ -786,7 +803,7 @@ function openBeanForm(id){
     <div class="row2">
       <label class="fld"><span class="fld-l">烘焙度</span>
         <input class="inp" data-k="roastLevel" value="${esc(d.roastLevel)}" placeholder="中浅烘"></label>
-      <label class="fld"><span class="fld-l">烘焙日期</span>
+      <label class="fld" style="display:none"><span class="fld-l">烘焙日期</span>
         <input class="inp" type="date" data-k="roastDate" value="${esc(d.roastDate)}"></label>
     </div>
     <label class="fld"><span class="fld-l">状态</span>
@@ -1013,13 +1030,11 @@ function openBrewForm(id){
       <label class="fld"><span class="fld-l">粉量 (g)</span>
         <input class="inp" type="number" inputmode="decimal" data-k="dose" value="${esc(d.dose)}" placeholder="15"></label>
     </div>
-    <div class="card" style="padding:12px;margin-bottom:12px">
-      <div class="row2">
-        <label class="fld" style="margin-bottom:0"><span class="fld-l">磨豆机</span>
-          <input class="inp" data-k="grinder" data-hist="grinder" value="${esc(d.grinder)}" placeholder="C40"></label>
-        <label class="fld" style="margin-bottom:0"><span class="fld-l">研磨度</span>
-          <input class="inp" data-k="grind" data-hist="grind" value="${esc(d.grind)}" placeholder="22格"></label>
-      </div>
+    <div class="row2">
+      <label class="fld"><span class="fld-l">磨豆机</span>
+        <input class="inp" data-k="grinder" data-hist="grinder" value="${esc(d.grinder)}" placeholder="C40"></label>
+      <label class="fld"><span class="fld-l">研磨度</span>
+        <input class="inp" data-k="grind" data-hist="grind" value="${esc(d.grind)}" placeholder="22格"></label>
     </div>
     <div class="row2">
       <label class="fld"><span class="fld-l">方式</span>
@@ -1061,6 +1076,26 @@ function openBrewForm(id){
     $('#manualBeanBox', page).style.display = sel.value ? 'none' : '';
   };
   $$('[data-hist]', page).forEach(inp=> attachHistory(inp));
+
+  // 粉水比联动
+  const doseEl = $('[data-k="dose"]', page);
+  const ratioEl = $('[data-k="ratio"]', page);
+  const waterEl = $('[data-k="totalWater"]', page);
+  function calcWater(){
+    const dv = num(doseEl.value), rv = num(ratioEl.value);
+    if(dv>0 && rv>0) waterEl.value = (dv*rv).toFixed(0);
+  }
+  function calcRatio(){
+    const dv = num(doseEl.value), wv = num(waterEl.value);
+    if(dv>0 && wv>0) ratioEl.value = (wv/dv).toFixed(1);
+  }
+  if(ratioEl) ratioEl.addEventListener('blur', calcWater);
+  if(waterEl) waterEl.addEventListener('blur', calcRatio);
+  if(doseEl) doseEl.addEventListener('blur', ()=>{
+    if(ratioEl.value && !waterEl.value) calcWater();
+    else if(waterEl.value && !ratioEl.value) calcRatio();
+  });
+
   page._beforeSave = ()=>{
     const o = readForm(page);
     if(sel.value){
@@ -1234,7 +1269,7 @@ function renderRecipeDetail(r){
   <div class="page-head">
     <button class="icon-btn" data-act="close-detail">${ICON.back()}</button>
     <h1 class="title" style="font-size:18px">${esc(r.title||'方案')}</h1>
-    <button class="icon-btn sm" data-act="edit-recipe" data-id="${r.id}">${ICON.gear()}</button>
+    <span style="width:36px;flex:0 0 36px"></span>
   </div>
   <div class="card">
     <div class="grid2">
@@ -1256,7 +1291,11 @@ function renderRecipeDetail(r){
       <div style="font-size:13.5px;margin-top:3px;white-space:pre-wrap">${esc(r.technique)}</div>`:''}
     ${r.notes?`<div class="divider"></div><div class="k" style="font-size:11.5px;color:var(--sub)">笔记</div>
       <div style="font-size:13.5px;margin-top:3px;white-space:pre-wrap">${esc(r.notes)}</div>`:''}
-  </div>`;
+  </div>
+  <div class="btn-row" style="margin-top:20px">
+    <button class="btn" data-act="edit-recipe" data-id="${r.id}">修改方案</button>
+  </div>
+  `;
 }
 function openRecipeForm(id){
   const b = id ? state.recipes.find(x=>x.id===id) : null;
@@ -1324,8 +1363,18 @@ function viewStats(){
   const shopList = state.experiences.filter(e=>(e.date||'').startsWith(monthStr));
   const shopSpend = shopList.reduce((s,e)=>s+num(e.price),0);
   const totalWeight = monthPurchases.reduce((s,p)=>s+num(p.weight),0);
-  const avgPerDay = (beanSpend+shopSpend) / daysInMonth;
   const avgPrice = totalWeight>0 ? beanSpend/totalWeight : 0;
+
+  const monthBrews = state.brews.filter(b=>(b.date||'').startsWith(monthStr));
+  const brewCount = monthBrews.length;
+  let brewSpend = 0;
+  monthBrews.forEach(b=>{
+    const bean = state.beans.find(x=>x.id===b.beanId);
+    if(!bean) return;
+    const p = priceInfo(bean);
+    if(p.latest && b.dose) brewSpend += num(b.dose) * p.latest;
+  });
+
   const buyCount = {};
   state.beans.forEach(b=>{
     const n = (b.purchases||[]).length;
@@ -1376,8 +1425,8 @@ function viewStats(){
 
   <div class="stat-big">
     <div class="sb-row">
-      <div class="sb-item"><div class="sb-v">¥${(beanSpend+shopSpend).toFixed(1)}</div><div class="sb-k">本月总花费</div></div>
-      <div class="sb-item"><div class="sb-v">¥${avgPerDay.toFixed(1)}</div><div class="sb-k">平均每天</div></div>
+      <div class="sb-item"><div class="sb-v">${brewCount}</div><div class="sb-k">本月冲煮次数</div></div>
+      <div class="sb-item"><div class="sb-v">¥${brewSpend.toFixed(1)}</div><div class="sb-k">冲煮花费</div></div>
       <div class="sb-item"><div class="sb-v">¥${avgPrice.toFixed(2)}</div><div class="sb-k">平均克价</div></div>
     </div>
   </div>
@@ -1385,15 +1434,15 @@ function viewStats(){
   <div class="stat-triple">
     <div class="st-item">
       <div class="st-v">¥${beanSpend.toFixed(1)}</div>
-      <div class="st-k">买豆消费</div>
+      <div class="st-k">买豆支出</div>
+    </div>
+    <div class="st-item">
+      <div class="st-v">${totalWeight.toFixed(0)}g</div>
+      <div class="st-k">买豆重量</div>
     </div>
     <div class="st-item">
       <div class="st-v">¥${shopSpend.toFixed(1)}</div>
       <div class="st-k">门店消费</div>
-    </div>
-    <div class="st-item">
-      <div class="st-v">${totalWeight.toFixed(0)}g</div>
-      <div class="st-k">购入重量</div>
     </div>
   </div>
 
@@ -1784,13 +1833,17 @@ function openFull(title, bodyHTML){
       <h2 class="fp-title">${esc(title)}</h2>
       <span style="width:36px;flex:0 0 36px"></span>
     </div>
-    <div class="fp-body">${bodyHTML}</div>`;
+    <div class="fp-body">${bodyHTML}</div>
+    <button class="fab-back" data-close>${ICON.back()}</button>
+  `;
   document.body.appendChild(el);
   requestAnimationFrame(()=>el.classList.add('in'));
-  el.querySelector('[data-close]').onclick = ()=>{
-    el.classList.remove('in');
-    setTimeout(()=>el.remove(), 240);
-  };
+  el.querySelectorAll('[data-close]').forEach(btn=>{
+    btn.onclick = ()=>{
+      el.classList.remove('in');
+      setTimeout(()=>el.remove(), 240);
+    };
+  });
   $$('.stars', el).forEach(box=>{
     box.addEventListener('click', e=>{
       const s = e.target.closest('.star');
@@ -1907,6 +1960,10 @@ document.addEventListener('click', e=>{
     case 'close-detail': ui.detail = null; render(); window.scrollTo(0,0); break;
     case 'set-bean-tab':
       ui.beanTab = el.dataset.tab; render(); break;
+    case 'toggle-bean-brews':
+      ui.beanBrewsOpen = !(ui.beanBrewsOpen !== false);
+      render();
+      break;
     case 'set-theme': {
       state.settings.theme = el.dataset.key;
       saveState(); applyTheme(state.settings.theme);
@@ -1947,7 +2004,7 @@ document.addEventListener('click', e=>{
       saveState();
       page.querySelector('[data-close]').click();
       toast('已保存');
-      setTimeout(render, 240);
+      render();
       break;
     }
     case 'toggle-blend': {
@@ -2080,7 +2137,7 @@ document.addEventListener('click', e=>{
       saveState();
       page.querySelector('[data-close]').click();
       toast('已保存');
-      setTimeout(render, 240);
+      render();
       break;
     }
     case 'save-exp': {
@@ -2094,7 +2151,7 @@ document.addEventListener('click', e=>{
       saveState();
       page.querySelector('[data-close]').click();
       toast('已保存');
-      setTimeout(render, 240);
+      render();
       break;
     }
     case 'open-brew': {
@@ -2151,7 +2208,7 @@ document.addEventListener('click', e=>{
       saveState();
       page.querySelector('[data-close]').click();
       toast('已保存');
-      setTimeout(render, 240);
+      render();
       break;
     }
     case 'pick-month': openMonthPicker(statsYM, v=>{ statsYM = v; render(); }); break;
