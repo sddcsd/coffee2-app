@@ -54,7 +54,6 @@ input,textarea,select{outline:none;appearance:none;-webkit-appearance:none}
 .fab svg{width:22px;height:22px}
 .fab:active{transform:translateX(-50%) scale(.93)}
 
-/* 悬浮返回按钮（右下角） */
 .fab-back{position:fixed;right:20px;bottom:90px;z-index:160;width:52px;height:52px;border-radius:50%;
   border:1px solid var(--line);background:var(--card);color:var(--accent);
   display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.22);
@@ -68,9 +67,7 @@ body.theme-dark .fab-back{background:#1E2030;color:#B8CEE2;border-color:#33374D}
   font-size:12.5px;cursor:pointer;font-weight:500;transition:.16s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .status-tabs button.on{background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.08);font-weight:700}
 
-/* 快捷状态行（胶囊）—— 只在新建/修改表单里使用 */
 .quick-status{display:flex;gap:6px}
-.quick-status.bare{margin-top:0;padding-top:0;border-top:0}
 .qs-btn{flex:1 1 0;min-width:0;border:1px solid var(--line);background:var(--card2);color:var(--sub);
   border-radius:999px;padding:8px 4px;font-size:12.5px;cursor:pointer;transition:.15s;
   line-height:1.4;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
@@ -176,7 +173,7 @@ textarea.inp{resize:vertical;min-height:70px;line-height:1.55}
   background:var(--bg);border-bottom:1px solid var(--line);flex:0 0 auto}
 .fp-title{flex:1;margin:0;font-size:17px;font-weight:700;color:var(--deep);text-align:center;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fp-body{flex:1;overflow-y:auto;padding:16px 14px calc(90px + env(safe-area-inset-bottom));
+.fp-body{flex:1;overflow-y:auto;padding:16px 14px calc(40px + env(safe-area-inset-bottom));
   max-width:640px;width:100%;margin:0 auto;-webkit-overflow-scrolling:touch}
 
 .mask{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:200;display:flex;align-items:center;
@@ -804,7 +801,7 @@ function openBeanForm(id){
     </div>
     <div class="fld">
       <span class="fld-l">状态</span>
-      <div class="quick-status bare" id="formStatusRow">
+      <div class="quick-status" id="formStatusRow">
         <button type="button" class="qs-btn ${d.status==='drinking'?'on':''}" data-status="drinking">在喝</button>
         <button type="button" class="qs-btn ${d.status==='stock'?'on':''}" data-status="stock">囤豆中</button>
         <button type="button" class="qs-btn ${d.status==='done'?'on':''}" data-status="done">喝完</button>
@@ -828,7 +825,6 @@ function openBeanForm(id){
     </div>
   `);
 
-  /* 四个胶囊按钮点击 */
   $$('#formStatusRow .qs-btn', page).forEach(btn=>{
     btn.onclick = ()=>{
       if(btn.hasAttribute('data-friend')){
@@ -1108,6 +1104,15 @@ function openBrewForm(id){
 
   page._beforeSave = ()=>{
     const o = readForm(page);
+    o.ratings = {
+      bitter:  num(o.bitter),
+      sour:    num(o.sour),
+      sweet:   num(o.sweet),
+      body:    num(o.body),
+      overall: num(o.overall)
+    };
+    delete o.bitter; delete o.sour; delete o.sweet; delete o.body; delete o.overall;
+
     if(sel.value){
       const bean = state.beans.find(x=>x.id===sel.value);
       o.beanId = sel.value; o.beanName = bean?bean.name:'';
@@ -1831,6 +1836,7 @@ async function copyText(text){
 function openFull(title, bodyHTML){
   const el = document.createElement('div');
   el.className = 'fullpage';
+  const hasCancel = bodyHTML.includes('data-act="close-full"');
   el.innerHTML = `
     <div class="fp-head">
       <span style="width:36px;flex:0 0 36px"></span>
@@ -1838,7 +1844,7 @@ function openFull(title, bodyHTML){
       <span style="width:36px;flex:0 0 36px"></span>
     </div>
     <div class="fp-body">${bodyHTML}</div>
-    <button class="fab-back" data-close>${ICON.back()}</button>
+    ${hasCancel ? '' : `<button class="fab-back" data-close>${ICON.back()}</button>`}
   `;
   document.body.appendChild(el);
   requestAnimationFrame(()=>el.classList.add('in'));
@@ -1958,7 +1964,11 @@ document.addEventListener('click', e=>{
     case 'tab':
       ui.tab = el.dataset.tab; ui.detail = null; render(); window.scrollTo(0,0); break;
     case 'settings': openSettings(); break;
-    case 'close-full': el.closest('.fullpage')?.querySelector('[data-close]')?.click(); break;
+    case 'close-full': {
+      const fp = el.closest('.fullpage');
+      if(fp){ fp.classList.remove('in'); setTimeout(()=>fp.remove(), 240); }
+      break;
+    }
     case 'close-detail': ui.detail = null; render(); window.scrollTo(0,0); break;
     case 'set-bean-tab':
       ui.beanTab = el.dataset.tab; render(); break;
@@ -1999,14 +2009,15 @@ document.addEventListener('click', e=>{
       if(!o.name || !o.name.trim()){ toast('请填写品名'); return; }
       if(id){
         const b = state.beans.find(x=>x.id===id);
-        Object.assign(b, o);
+        if(b) Object.assign(b, o);
       }else{
         state.beans.push(Object.assign({ id:uid('bean'), createdAt:Date.now() }, o));
       }
       saveState();
-      page.querySelector('[data-close]').click();
-      toast('已保存');
+      page.remove();
       render();
+      window.scrollTo(0, 0);
+      toast('已保存');
       break;
     }
     case 'toggle-blend': {
@@ -2132,28 +2143,32 @@ document.addEventListener('click', e=>{
         o.beanName = b ? b.name : '';
       }
       if(id){
-        Object.assign(state.brews.find(x=>x.id===id), o);
+        const b = state.brews.find(x=>x.id===id);
+        if(b) Object.assign(b, o);
       }else{
         state.brews.push(Object.assign({ id:uid('brew'), createdAt:Date.now() }, o));
       }
       saveState();
-      page.querySelector('[data-close]').click();
-      toast('已保存');
+      page.remove();
       render();
+      window.scrollTo(0, 0);
+      toast('已保存');
       break;
     }
     case 'save-exp': {
       const page = el.closest('.fullpage');
       const o = page._beforeSave ? page._beforeSave() : readForm(page);
       if(id){
-        Object.assign(state.experiences.find(x=>x.id===id), o);
+        const x = state.experiences.find(x=>x.id===id);
+        if(x) Object.assign(x, o);
       }else{
         state.experiences.push(Object.assign({ id:uid('exp'), createdAt:Date.now() }, o));
       }
       saveState();
-      page.querySelector('[data-close]').click();
-      toast('已保存');
+      page.remove();
       render();
+      window.scrollTo(0, 0);
+      toast('已保存');
       break;
     }
     case 'open-brew': {
@@ -2203,14 +2218,16 @@ document.addEventListener('click', e=>{
       const o = page._beforeSave ? page._beforeSave() : readForm(page);
       if(!o.title || !o.title.trim()){ toast('请填写方案名称'); return; }
       if(id){
-        Object.assign(state.recipes.find(x=>x.id===id), o);
+        const r = state.recipes.find(x=>x.id===id);
+        if(r) Object.assign(r, o);
       }else{
         state.recipes.push(Object.assign({ id:uid('recipe'), pinned:false, createdAt:Date.now() }, o));
       }
       saveState();
-      page.querySelector('[data-close]').click();
-      toast('已保存');
+      page.remove();
       render();
+      window.scrollTo(0, 0);
+      toast('已保存');
       break;
     }
     case 'pick-month': openMonthPicker(statsYM, v=>{ statsYM = v; render(); }); break;
